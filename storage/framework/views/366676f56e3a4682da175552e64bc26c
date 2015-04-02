@@ -1,0 +1,20 @@
+<?php $__env->startSection('header'); ?>
+
+	<?php echo $__env->make('common.header.index', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('content'); ?>
+
+	<div class="ui grid" id="posts" style="padding-top: 40px">
+
+		<?php foreach ($data['posts'] as $key => $post): ?>
+
+			<?php echo $__env->make('posts.post', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+
+		<?php endforeach ?>
+	</div>
+
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

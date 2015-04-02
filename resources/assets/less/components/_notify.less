@@ -1,0 +1,108 @@
+/* ======================================================
+*  notify
+*  =====================================================*/
+
+#notify-container {
+	.clearfix;
+	position: fixed;
+	z-index: 5000;
+	left: 20px;
+	pointer-events: none;
+	right: 20px;
+
+	&.top {
+		top: @navbar-height + 20px;
+	}
+
+	&.bottom {
+		bottom: 20px;
+	}
+
+	&.left {
+		.notify {
+			clear: left;
+			float: left;
+			padding-left: 35px;
+
+			.close {
+				left: 10px;
+			}
+		}
+	}
+
+	&.right {
+		.notify {
+			clear: right;
+			float: right;
+			padding-right: 35px;
+
+			.close {
+				right: 10px;
+			}
+		}
+	}
+}
+
+.notify {
+	.transition(all 300ms ease-out);
+	.alert;
+	float: right;
+	margin-bottom: 10px;
+	max-width: 500px;
+	min-width: 250px;
+	pointer-events: auto;
+	position: relative;
+
+	// &.dismissable {
+	// 	cursor: pointer;
+	// }
+
+	&.success {
+		.alert-success;
+	}
+
+	&.info {
+		.alert-info;
+	}
+
+	&.warning {
+		.alert-warning;
+	}
+
+	&.error,
+	&.danger {
+		.alert-danger;
+	}
+
+	p {
+		&.fa-left:before {
+			float: left;
+			margin-right: 5px;
+		}
+
+		&.fa-right:before {
+			float: right;
+			margin-left: 5px;
+		}
+	}
+
+	.close {
+		font-size: 28px;
+		margin-top: -14px;
+		position: absolute;
+		top: 50%;
+
+		&:focus {
+			outline: none;
+		}
+	}
+}
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,39 @@
+{
+  "name": "gifplayer",
+  "homepage": "http://rubentd.com/gifplayer/",
+  "description": "Customizable jquery plugin to play and stop animated gifs. Similar to 9gag’s",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/saatur/gifplayer.git"
+  },
+  "main": [
+    "js/jquery.gifplayer.js",
+    "css/gifplayer.css"
+  ],
+  "authors": [
+    "Rubén Torres"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "example",
+    "css/myth",
+    "Gruntfile.js"
+  ],
+  "dependencies": {
+    "jquery": ">=1.8"
+  },
+  "_release": "c3f58aee22",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "c3f58aee22487285400bfda9ff93896b198f8f5d"
+  },
+  "_source": "git://github.com/saatur/gifplayer.git",
+  "_target": "*",
+  "_originalSource": "gifplayer"
+}

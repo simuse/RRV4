@@ -1,0 +1,64 @@
+/* ======================================================
+*  Header
+*  =====================================================*/
+
+.navbar-fixed-top {
+	margin-bottom: 0;
+}
+
+.navbar-brand {
+	padding: 15px;
+}
+
+.navbar-header {
+	float: left;
+}
+
+.navbar-right {
+	float: right;
+	margin: 0 15px 0 0 !important;
+
+	> li {
+		float: left;
+
+		> a {
+			padding-top: 15px;
+			padding-bottom: 15px;
+		}
+	}
+}
+
+/* 	nav
+---------------------------------------------- */
+.navbar-nav {
+	> li {
+		a > {
+			&.disabled {
+				color: @gray-light;
+				cursor: auto;
+				pointer-events: none;
+			}
+		}
+	}
+}
+
+/* sidebar-toggle
+---------------------------------------------- */
+.sidebar-toggle {
+	background-color: @gray-lighter;
+	border-right: 1px solid @gray-light;
+	color: @text-color;
+	display: block;
+	float: left;
+	font-size: 24px;
+	height: @navbar-height;
+	padding: 8px 15px;
+
+	&:hover,
+	&:focus,
+	&.active {
+		background-color: @gray;
+		color: @gray-light;
+		text-decoration: none;
+	}
+}

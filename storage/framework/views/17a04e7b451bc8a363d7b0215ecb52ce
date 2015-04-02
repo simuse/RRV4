@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<?php echo $__env->make('common.head', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+</head>
+<body>
+	<?php echo $__env->make('common.sidebar', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+
+	<?php echo $__env->make('common.header-user', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+
+	<div class="wrap" role="document">
+
+		<?php echo $__env->yieldContent('content'); ?>
+		
+	</div>
+
+	<?php echo $__env->make('common.modal-settings', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+
+	<?php echo $__env->make('common.scripts', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+</body>
+</html>

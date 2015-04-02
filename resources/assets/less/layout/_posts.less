@@ -1,0 +1,245 @@
+/* ======================================================
+*  Posts
+*  =====================================================*/
+.post-type-image,
+.post-type-video,
+.post-type-wikipedia,
+.post-type-reddit,
+.post-type-album {
+	display: none !important;
+}
+
+body.layout-masonry {
+	.post {
+		margin-right: 15px;
+		width: 300px;
+	}
+
+	.post-domain,
+	.post-type {
+		display: none;
+	}
+}
+
+#posts {
+	.clearfix;
+	position: relative;
+	width: 100%;
+}
+
+.post,
+.comments-wrapper {
+	margin: 0 auto;
+	max-width: 800px;
+	width: 100%;
+}
+
+.panel-post {
+	border-color: @gray-light;
+
+	.panel-heading {
+		border-bottom: 1px solid @gray-light;
+	 	padding-bottom: 4px;
+	 	position: relative;
+	}
+
+	.panel-footer {
+		background-color: @gray-lighter;
+	}
+}
+
+/* Post header
+---------------------------------------------- */
+
+.post-title {
+	float: left;
+	font-size: 14px;
+	margin: 0;
+	padding-right: 30px;
+
+	@media (max-width: @screen-xs-max) {
+		padding-right: 0;
+	}
+}
+
+.post-type {
+	position: absolute;
+	top: 10px;
+	right: 15px;
+
+	@media (max-width: @screen-xs-max) {
+		display: none;
+	}
+}
+
+.post-meta {
+	.clearfix;
+	font-size: 12px;
+
+	p {
+		margin-bottom: 0;
+	}
+}
+
+.post-domain {
+	float: right;
+
+	@media (max-width: @screen-xs-max) {
+		display: none;
+	}
+}
+
+/* Post footer
+---------------------------------------------- */
+.dropdown-social {
+	.dropdown-menu {
+		min-width: 0;
+		padding: 0;
+
+		> li {
+			> a {
+				padding: 3px 0;
+				text-align: center;
+				width: 32px;
+
+				&:hover {
+					background-color: @brand-secondary;
+					color: #fff;
+				}
+			}
+
+			&:first-child a {
+				padding-top: 6px;
+			}
+
+			&:last-child a {
+				padding-bottom: 6px;
+			}
+		}
+	}
+}
+
+
+/* Post types
+---------------------------------------------- */
+
+.selftext {
+	.transition(height 200ms ease-out);
+	padding: 15px 15px 5px;
+	overflow: hidden;
+	position: relative;
+
+	p {
+		max-width: 700px;
+		line-height: 1.8;
+		margin: 0 auto 10px;
+	}
+
+	.show-full {
+		bottom: 0;
+		display: none;
+		left: 0;
+		position: absolute;
+	}
+}
+
+.post-img {
+	.transition(opacity 250ms ease-in);
+	opacity: 0;
+	height: auto;
+	width: 100%;
+}
+
+.post-video {
+	.embed-responsive;
+	.embed-responsive-16by9;
+
+	> iframe {
+		.embed-responsive-item;
+		.transition(opacity 250ms ease-in);
+		opacity: 0;
+	}
+}
+
+/* Comments
+---------------------------------------------- */
+
+.panel-comments {
+	border-color: @gray-light;
+
+	.panel-heading {
+		border-bottom: 1px solid @gray-light;
+		background-color: @gray-lighter;
+	}
+
+	.panel-body {
+		padding: 15px;
+	}
+}
+
+.comments {
+	.list-unstyled;
+
+	> li {
+		// background: url(../img/list-item-root.png) repeat-y left 50px;
+		// border-left: 1px solid @gray;
+		border-bottom: 1px solid @gray-light;
+		margin-bottom: 10px;
+		padding-bottom: 10px;
+
+		&:last-child {
+			border-bottom: none;
+			margin: 0;
+			padding-bottom: 0;
+		}
+	}
+}
+
+.comment {
+	.toggle-replies {
+		color: darken(@gray-lighter, 20%);
+		margin-right: 0;
+
+		&:hover {
+			color: @brand-primary;
+		}
+	}
+}
+
+.comment-replies {
+	.transition(height 300ms ease-out);
+	list-style: none;
+	height: auto;
+	overflow-y: hidden;
+	padding-left: 20px;
+}
+
+.comment-replies-hidden {
+	height: 0;
+}
+
+.gilded {
+	color: #E3D392;
+	margin-top: 3px;
+
+	.fa-circle {
+		font-size: 22px;
+	}
+
+	.fa-star {
+		color: #fff;
+		font-size: 14px;
+	}
+}
+
+.flair {
+	background-color: @gray-lighter;
+	border: 1px solid darken(@gray-lighter, 10%);
+	font-size: 11px;
+	padding: 3px;
+}
+
+
+
+
+

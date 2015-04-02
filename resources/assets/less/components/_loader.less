@@ -1,0 +1,19 @@
+/* ======================================================
+*  Loader
+*  =====================================================*/
+
+#page-loader {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+
+	.bar {
+		.transition(width 250ms ease-out);
+		background-color: @brand-primary;
+		display: inline-block;
+		float: left;
+		width: 0;
+		height: 3px;
+	}
+}

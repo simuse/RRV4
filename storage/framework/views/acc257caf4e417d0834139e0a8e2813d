@@ -1,0 +1,29 @@
+<div class="post-heading">
+
+	<a class="ui corner label">
+		<i class="fa fa-image"></i>
+	</a>
+
+	<div class="header">
+		<a class="post-title" href="/p/<?php echo e($post['id']); ?>"><?php echo e($post['title']); ?></a>
+		<?php /* <i class="post-type fa fa-image pull-right"></i> */ ?>
+	</div>
+
+	<hr>
+
+	<div class="meta">
+
+		<p class="pull-left">
+			<a class="post-subreddit" href="/r/<?php echo e($post['subreddit']); ?>">
+				<strong><?php echo e($post['subreddit']); ?></strong>
+			</a>
+			- <span class="post-score ui tiny red label"><?php echo e($post['score']); ?></span>
+			- <span class="post-time">submitted <?php echo e($post['timeago']); ?> ago by</span>
+			<a class="post-author" href="#"><?php echo e($post['author']); ?></a>
+		</p>
+
+		<p class="post-domain pull-right"><?php echo e($post['domain']); ?></p>
+
+	</div>
+
+</div><!-- / panel-heading -->

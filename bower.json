@@ -1,0 +1,18 @@
+{
+  "name": "Red.it",
+  "dependencies": {
+    "animate.css": "~3.2.3",
+    "backbone": "~1.1.2",
+    "bootstrap": "latest",
+    "console-polyfill": "~0.1.1",
+    "fancybox": "~2.1.5",
+    "font-awesome": "latest",
+    "imagesloaded": "~3.1.8",
+    "isotope": "~2.1.1",
+    "jquery-mousewheel": "~3.1.12",
+    "unveil": "~1.3.0",
+    "gifplayer": "*",
+    "Semantic-UI": "~1.11.6"
+  },
+  "devDependencies": {}
+}

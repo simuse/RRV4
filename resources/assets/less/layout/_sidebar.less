@@ -1,0 +1,98 @@
+/* ======================================================
+*  Sidebar
+*  =====================================================*/
+
+@sidebar-bg: @gray;
+@sidebar-color: #fff;
+
+.sidebar {
+	.transition(left 250ms ease-out);
+	background-color: @sidebar-bg;
+	color: #fff;
+	left: -@sidebar-width;
+	height: 100%;
+	position: fixed;
+	top: @navbar-height;
+	width: @sidebar-width;
+	z-index: @zindex-navbar;
+
+	&.open {
+		left: 0;
+	}
+}
+
+.sidebar-form {
+	padding: 15px;
+}
+
+/* sidebar-nav
+---------------------------------------------- */
+.sidebar-nav {
+	> li {
+		> a {
+			border-top: 1px solid lighten(@sidebar-bg, 5%);
+			color: @sidebar-color;
+
+			&:hover,
+			&:focus {
+				background: lighten(@sidebar-bg, 5%);
+			}
+
+			&:last-child {
+				border-bottom: 1px solid lighten(@sidebar-bg, 5%);
+			}
+
+			.caret {
+				.rotate(180deg);
+				.transition(transform 250ms ease-out);
+			}
+
+			&.collapsed {
+				.caret {
+					.rotate(0);
+				}
+			}
+		}
+	}
+
+	.caret {
+		float: right;
+		margin-top: 7px;
+	}
+}
+
+/* sidebar-subnav
+---------------------------------------------- */
+.sidebar-subnav {
+	list-style: circle !important;
+
+	> li {
+		> a {
+			color: #fff;
+			padding-left: 30px;
+
+			&:hover {
+				background-color: @gray-light;
+			}
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

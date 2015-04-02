@@ -1,0 +1,66 @@
+<?php
+
+	$comment = $comment['data'];
+	$hasReplies = isset($comment['replies']['data']['children']) && !empty($comment['replies']['data']['children']);
+
+?>
+
+<div class="comment">
+
+	<div class="content">
+
+		<a class="author" href="#"><?php echo e(isset($comment['author']) ? $comment['author'] : '[deleted]'); ?></a>
+
+		<?php /* meta */ ?>
+		<div class="metadata">
+
+			<span class="label" title="Comment Karma"><?php echo e(isset($comment['score']) ? $comment['score'] : '0'); ?></span>
+
+			<?php /* flair */ ?>
+			<?php if(isset($comment['author_flair_text']) && !is_null($comment['author_flair_text'])): ?>
+				- <span class="flair"> <?php echo e($comment['author_flair_text']); ?></span>
+			<?php endif; ?>
+
+			<?php /* gold */ ?>
+			<?php if(isset($comment['gilded']) && $comment['gilded'] === 1): ?>
+				- <span class="fa-stack gilded" title="The user has received Gold for this comment">
+					<i class="fa fa-circle fa-stack-2x"></i>
+					<i class="fa fa-star fa-stack-1x"></i>
+				</span>
+			<?php endif; ?>
+
+		</div>
+
+		<?php /* content */ ?>
+		<p class="text">
+			<?php echo e(isset($comment['body']) ? $comment['body'] : '[deleted]'); ?>
+
+		</p>
+
+		<?php /* actions */ ?>
+		<div class="actions">
+			<a class="upvote" href="#"><i class="fa fa-arrow-up"></i></a>
+			<a class="downvote" href="#"><i class="fa fa-arrow-down"></i></a>
+			<a class="reply" href="#">Reply</a>
+			<a class="save" href="#">Save</a>
+		</div>
+
+		<?php /* replies */ ?>
+		<?php if($hasReplies): ?>
+        	<div class="comments">
+
+				<?php $replies = $comment['replies']['data']['children'] ?>
+
+				<?php foreach($replies as $key => $comment): ?>
+
+					<?php echo $__env->make('posts.post-comment', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+
+				<?php endforeach; ?>
+
+			</div>
+		<?php endif; ?>
+
+	</div>
+
+</div>
+

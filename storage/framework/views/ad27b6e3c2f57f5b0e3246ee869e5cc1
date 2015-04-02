@@ -1,0 +1,67 @@
+<?php /* menu */ ?>
+<nav class="ui large menu fixed">
+
+	<?php /* header */ ?>
+	<a class="header item" href="#">
+		Red.It
+  	</a>
+
+	<div class="right menu">
+
+		<?php /* sort */ ?>
+		<?php if($viewName === 'index'): ?>
+			<div class="ui dropdown item">
+				<?php echo e($sort ? ucfirst($sort) : 'Sort'); ?>
+
+				<i class="fa fa-sort"></i>
+				<div class="menu">
+					<?php foreach(Config::get('reddit.sortOptions') as $key => $value): ?>
+					<li >
+						<a class="item <?php if($value === $sort): ?> active <?php endif; ?>" href="<?php echo e($url); ?>/<?php echo e($value); ?>">
+							<?php echo e(ucfirst($value)); ?>
+
+						</a>
+					</li>
+				<?php endforeach; ?>
+				</div>
+			</div>
+		<?php endif; ?><?php /* / sort */ ?>
+
+		<?php /* sortFrom */ ?>
+		<?php if(in_array($sort, array('top', 'controversial')) && $viewName === 'index'): ?>
+			<div class="ui dropdown item">
+				<?php echo e($sortFrom ? ucfirst($sortFrom) : 'From'); ?>
+
+				<i class="fa fa-clock-o"></i>
+				<div class="menu">
+					<?php foreach(Config::get('reddit.timeOptions') as $key => $value): ?>
+					<li >
+						<a class="item <?php if($value === $sort): ?> active <?php endif; ?>" href="<?php echo e($url); ?>/<?php echo e($sort); ?>/<?php echo e($value); ?>">
+							<?php echo e(ucfirst($value)); ?>
+
+						</a>
+					</li>
+				<?php endforeach; ?>
+				</div>
+			</div>
+		<?php endif; ?><?php /* / sortFrom */ ?>
+
+		<div class="item">
+			<div class="ui primary icon button" id="toggle-layout" title="Toggle layout">
+				<i class="fa fa-th"></i>
+			</div>
+		</div>
+
+		<a class="item ui icon button <?php if($page <= 1): ?> disabled <?php endif; ?>" href="<?php if($page <= 1): ?> # <?php else: ?> ?p=<?php echo e($page - 1); ?><?php endif; ?>" title="Previous page">
+			<i class="fa fa-arrow-left"></i>
+		</a>
+
+		<a class="item ui icon button" href="?p=<?php echo e($page + 1); ?>" title="Next page">
+			<i class="fa fa-arrow-right"></i>
+		</a>
+
+	</div>
+
+	<?php echo $__env->make('common.loader', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+
+</nav><?php /* / menu */ ?>

@@ -1,0 +1,24 @@
+/* ======================================================
+*  Content
+*  =====================================================*/
+
+body.sidebar-open {
+	overflow: hidden;
+
+	.wrap {
+		margin-left: @sidebar-width;
+	}
+}
+
+.wrap {
+	.transition(margin-left 250ms ease-out);
+	min-width: @screen-xs-max;
+	margin-left: 0;
+	margin-top: @navbar-height;
+	padding: (@grid-gutter-width / 2);
+	z-index: @zindex-content;
+
+	@media (max-width: @screen-xs-max) {
+		padding: (@grid-gutter-width / 2) 5px;
+	}
+}

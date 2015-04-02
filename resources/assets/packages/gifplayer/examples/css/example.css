@@ -1,0 +1,21 @@
+body {
+	font-family: 'Open Sans', sans-serif;
+}
+.wrap {
+	width: 365px;
+	margin: 0 auto;
+	text-align: center;
+}
+.wrap h1 {
+	font-weight: 400;
+	font-size: 40px;
+}
+
+.wrap p {
+	font-weight: 400;
+	font-size: 20px;
+}
+
+.wrap img {
+	width: 100%;
+}
