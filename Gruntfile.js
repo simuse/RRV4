@@ -18,6 +18,7 @@
  * - plato         generate complexity analysis reports with plato
  * - yuidoc        generate JS documentation
  * - bump          bump project version
+ * - wow           increase developer morale
  *
  * Bundled tasks:
  * --------------
@@ -412,10 +413,24 @@ module.exports = function (grunt) {
 
         }, // bump
 
+        wow: {
+            target: {
+                options: {
+                    source: [
+                        'You are {buzz} amazing.',
+                        'Damn! you got {adj} game.',
+                        'You lucky {adj} lad !',
+                        'That was a great move, {adj} {noun}',
+                        'On a scale of 1 to ten, I would give you {num}'
+                    ]
+                }
+            },
+        }, // wow
+
     };
 
     require('load-grunt-tasks')(grunt);
-    require('time-grunt')(grunt);
+    // require('time-grunt')(grunt);
     grunt.initConfig(grunt.util._.extend(taskConfig, userConfig));
 
     /* ======================================================
