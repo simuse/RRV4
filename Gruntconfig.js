@@ -79,14 +79,14 @@ module.exports = {
                 // '<%= dir.pkg %>/bootstrap/js/scrollspy.js',
                 // '<%= dir.pkg %>/bootstrap/js/tab.js',
                 // '<%= dir.pkg %>/bootstrap/js/transition.js',
-                // '<%= dir.pkg %>/fancybox/source/jquery.fancybox.js',
-                // '<%= dir.pkg %>/isotope/dist/isotope.pkgd.js',
+                '<%= dir.pkg %>/Semantic-UI/dist/semantic.js',
+                '<%= dir.pkg %>/fancybox/source/jquery.fancybox.js',
+                '<%= dir.pkg %>/isotope/dist/isotope.pkgd.js',
                 // '<%= dir.pkg %>/imagesloaded/imagesloaded.pkgd.js',
                 // '<%= dir.pkg %>/unveil/jquery.unveil.js',
                 // '<%= dir.pkg %>/jquery-mousewheel/jquery.mousewheel.js',
                 // '<%= dir.pkg %>/freezeframe/freezeframe.js',
                 // '<%= dir.pkg %>/gifplayer/js/jquery.gifplayer.js',
-                '<%= dir.pkg %>/Semantic-UI/dist/semantic.js',
 
             ],
 
@@ -96,10 +96,10 @@ module.exports = {
 
             js: [
 
-                // '<%= dir.src %>/js/helpers.js',
-                // '<%= dir.src %>/js/extend.js',
-                // '<%= dir.src %>/js/modules/*.js',
-                // '<%= dir.src %>/js/main.js',
+                '<%= dir.src %>/js/helpers.js',
+                '<%= dir.src %>/js/extend.js',
+                '<%= dir.src %>/js/modules/*.js',
+                '<%= dir.src %>/js/main.js',
 
             ],
 
