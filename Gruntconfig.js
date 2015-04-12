@@ -5,7 +5,7 @@
 module.exports = {
 
     /**
-     * Folders used in Grunt tasks
+     * Paths
      * @type {Object}
      */
     dir: {
