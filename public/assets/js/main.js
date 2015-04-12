@@ -264,70 +264,190 @@ function eraseCookie(name) {
 })(jQuery);
 ;jQuery(document).ready(function($) {
 
-	/* Fancybox
+	/* Common - Get User settings via Cookies
 	---------------------------------------------- */
-	$('.lightbox').fancybox({
+	if (readCookie('layout')) {
+		window.settings.layout = readCookie('layout');
+	}
+
+	/* Common - Init dropdowns
+	---------------------------------------------- */
+	$('.dropdown').dropdown({
+	    transition: 'fade down'
+	});
+
+	/* Header - Toggle Sidebar
+	---------------------------------------------- */
+	$('#sidebar-toggle').on('click', function(e) {
+		e.preventDefault();
+		$('#sidebar').sidebar('toggle');
+	});
+
+	/* Sidebar - Open login form
+	---------------------------------------------- */
+  	$('#modal-login').on('click', function() {
+  		$('.ui.modal').modal().modal('show');
+  	});
+
+	/* Posts - Lazy Loading
+	---------------------------------------------- */
+	$('.post-image img, iframe').unveil(200, function() {
+		$(this).load(function() {
+			this.style.opacity = 1;
+
+			if (window.settings.layout === 'grid') {
+				$('#posts').isotope('layout');
+			}
+		});
+	});
+
+	/* Posts - Fancybox
+	---------------------------------------------- */
+	$('.post-image').fancybox({
 		autoResize: true,
 		closeBtn: false,
+		margin: 15,
 		mouseWheel: true,
-		// autoPlay: true
 	});
 
-	/* Isotope
+	/* Posts - Toggle Layout
 	---------------------------------------------- */
-	function initIsotope() {
-		$('#posts').isotope({
-			itemSelector: '.post',
-			layoutMode: 'masonry',
-		});
-		window.options.layout = 'masonry';
-	}
+	var setLayout = function(layout) {
 
-	function destroyIsotope() {
-		$('#posts').isotope('destroy');
-		window.options.layout = 'default';
-	}
+		if (layout === 'grid') {
 
-	function triggerIsotope() {
-		$('#posts').isotope('layout');
-	}
+			var $posts = $('.post');
 
-	/* Toggle layout
-	---------------------------------------------- */
-	$('#toggle-layout').on('click', function() {
+			// isotope
+			$posts.addClass('isotope');
+			$('#posts').isotope({
+				itemSelector: '.post',
+				layoutMode: 'masonry',
+			});
 
-		if ($('body').hasClass('layout-masonry')) {
-			$('body').removeClass('layout-masonry');
-			destroyIsotope();
-			$(this).find('i').removeClass('fa-list');
-		} else {
-			$('body').addClass('layout-masonry');
-			initIsotope();
-			$(this).find('i').addClass('fa-list');
+			// post-heading event
+			// $posts.each(function() {
+			// 	var $header = $(this).find('.header'),
+			// 		$meta = $(this).find('.meta');
+
+			// 	$header.on('mouseenter', function() {
+			// 		$meta.stop().slideDown();
+			// 	}).on('mouseleave', function() {
+			// 		$meta.stop().slideUp();
+			// 	});
+			// });
+
+		} else if (layout === 'list') {
+
+			$('.post').removeClass('isotope');
+			$('#posts').isotope('destroy');
+			// $('.posts .header').off('mouseenter');
+			// $('.posts .header').off('mouseleave');
+
 		}
 
+		window.settings.layout = layout;
+
+		createCookie('layout', window.settings.layout, 30);
+
+	};
+
+	$('.set-layout').on('click', function(e) {
+		e.preventDefault();
+		$('.set-layout').removeClass('active');
+		$(this).addClass('active');
+		setLayout($(this).data('layout'));
 	});
 
-	/* Lazy load
+	// $('#toggle-layout').on('click', function() {
+	// 	var layout = (window.settings.layout === 'list') ? 'grid' : 'list';
+	// 	setLayout(layout);
+	// 	$(this).find('i').toggleClass('fa-th-list').toggleClass('fa-th');
+	// });
+
+	if ((window.settings.layout === 'grid') && (window.settings.view === 'index')) {
+		setLayout('grid');
+	}
+
+	/* Posts - Share - Twitter
 	---------------------------------------------- */
-	$('img').unveil(200, function() {
-		$(this).load(function() {
-			this.style.opacity = 1;
-			if (window.options.layout === 'masonry') {
-				triggerIsotope();
-				// freezeframe.run();
-			}
-		});
+	$('.share-twitter').on('click', function(e) {
+		e.preventDefault();
+
+		var url = window.settings.root + '/p/' + $(this).data('id'),
+			text = $(this).closest('.post').find('.post-title').text();
+
+		text += ' <on Red.It>';
+
+		window.open('http://twitter.com/share?url=' + url + '&text=' + text + '&', 'twitterwindow', 'height=450, width=550, top='+($(window).height()/2 - 225) +', left='+($(window).width()/2 - 225)+', toolbar=0, location=0, menubar=0, directories=0, scrollbars=0');
 	});
 
-	$('iframe').unveil(500,function() {
-		$(this).load(function() {
-			this.style.opacity = 1;
-			if (window.options.layout === 'masonry') {
-				triggerIsotope();
-			}
-		});
+	/* Posts - Share - Google
+	---------------------------------------------- */
+	$('.share-google').on('click', function(e) {
+		e.preventDefault();
+
+		var url = window.settings.root + '/p/' + $(this).data('id'),
+			text = $(this).closest('.post').find('.post-title').text();
+
+		text += ' <on Red.It>';
+
+		window.open('https://plus.google.com/share?url=' + url + '&text=' + text, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=450,width=550,top='+($(window).height()/2 - 225) +', left='+($(window).width()/2 - 225));
 	});
+
+
+	/* Posts - Share - Facebook
+	---------------------------------------------- */
+	// $(document).on('FBloaded', function() {
+
+	// 	$('.fb-share').on('click', function(e) {
+	// 		e.preventDefault();
+
+	// 		FB.ui({
+	// 			caption: 'Freeligion',
+	// 			description: 'Smile for Freedom and Peace',
+	// 		    link: $(this).data('url'),
+	// 		    method: 'feed',
+	// 		    name: 'Share a smile for peace',
+	// 		    picture: $(this).data('picture'),
+	// 		    redirect: false
+	// 		}, function(response) {
+	// 		    if (response && !response.error_code) {
+	// 		    	console.log('FB share: Posting completed.');
+	// 		    } else {
+	// 		    	console.log('FB share: Error while posting.');
+	// 		    }
+	// 		});
+	// 	});
+
+	// });
+
+
+
+	/* Common - Form validation
+	---------------------------------------------- */
+	// $('#formLogin').form({
+	// 	username: {
+	// 		identifier: 'username',
+	// 		rules: [
+	// 			{
+	// 				type: 'empty',
+	// 				prompt: 'Please enter your username'
+	// 			}
+	// 		]
+	// 	},
+	// 	password: {
+	// 		identifier: 'password',
+	// 		rules: [
+	// 			{
+	// 				type: 'empty',
+	// 				prompt: 'Please enter your password'
+	// 			}
+	// 		]
+	// 	}
+	// });
+
+
 
 	/* FreezeFrame: pause gifs
 	---------------------------------------------- */
@@ -340,100 +460,84 @@ function eraseCookie(name) {
 	// };
 	// freezeframe.run();
 
-	/* Sidebar toggle
-	---------------------------------------------- */
-	$('#sidebar-toggle').on('click', function() {
-
-		$('#sidebar-main').toggleClass('open');
-		$('body').toggleClass('sidebar-open');
-		$(this).toggleClass('active').find('i').toggleIcon();
-
-		if (window.options.layout === 'masonry') {
-			setTimeout(function() {
-				triggerIsotope();
-			}, 400);
-		}
-
-	});
-
 	/* Loader
 	---------------------------------------------- */
-	var loaderValue = 0;
+	// var loaderValue = 0;
 
-	var loaderInt = setInterval(function() {
-		loaderValue = loaderValue + 10;
-		setLoader(loaderValue);
-		if (loaderValue >= 100) {
-			clearInterval(loaderInt);
-		}
-	},2000);
+	// var loaderInt = setInterval(function() {
+	// 	loaderValue = loaderValue + 10;
+	// 	setLoader(loaderValue);
+	// 	if (loaderValue >= 100) {
+	// 		clearInterval(loaderInt);
+	// 	}
+	// },2000);
 
-	function setLoader(value) {
-		var $loader = $('#page-loader'),
-			$bar = $loader.find('.bar');
+	// function setLoader(value) {
+	// 	var $loader = $('#page-loader'),
+	// 		$bar = $loader.find('.bar');
 
-		$bar.css('width', value+'%');
-	}
+	// 	$bar.css('width', value+'%');
+	// }
 
-	function hideLoader() {
-		$('#page-loader').fadeOut();
-	}
+	// function hideLoader() {
+	// 	$('#page-loader').fadeOut();
+	// }
 
-	setLoader(10);
+	// setLoader(10);
 
 	/* Images loaded
 	---------------------------------------------- */
-	$('#posts').imagesLoaded(function() {
+	// $('#posts').imagesLoaded(function() {
 
-		$('#toggle-layout').removeClass('disabled');
-		setLoader(100);
-		clearInterval(loaderInt);
-		setTimeout(function() {
-			hideLoader();
-		}, 500);
-	});
+	// 	$('#toggle-layout').removeClass('disabled');
+	// 	setLoader(100);
+	// 	clearInterval(loaderInt);
+	// 	setTimeout(function() {
+	// 		hideLoader();
+	// 	}, 500);
+	// });
 
-	$(window).load(function() {
-		setLoader(100);
-	});
+	// $(window).load(function() {
+	// 	setLoader(100);
+	// });
 
 	/* Comments: toggle replies
 	---------------------------------------------- */
-	$('.toggle-replies').on('click', function(e) {
-		e.preventDefault();
+	// $('.toggle-replies').on('click', function(e) {
+	// 	e.preventDefault();
 
-		$(this).find('i').toggleIcon();
+	// 	$(this).find('i').toggleIcon();
 
-		$(this).closest('li').children('.comment-replies').toggleClass('comment-replies-hidden');
+	// 	$(this).closest('li').children('.comment-replies').toggleClass('comment-replies-hidden');
 
-	});
+	// });
 
 	/* Comments: toggle all comment
 	 * @todo disturbs icons and order of already closed comments
 	---------------------------------------------- */
-	$('.toggle-comments').on('click', function(e) {
-		e.preventDefault();
+	// $('.toggle-comments').on('click', function(e) {
+	// 	e.preventDefault();
 
-		$(this).find('i').toggleIcon();
+	// 	$(this).find('i').toggleIcon();
 
-		$('.toggle-replies').find('i').toggleIcon();
-		$('.comment-replies').toggleClass('comment-replies-hidden');
-	});
+	// 	$('.toggle-replies').find('i').toggleIcon();
+	// 	$('.comment-replies').toggleClass('comment-replies-hidden');
+	// });
 
 	/* Selftext : show full post
 	---------------------------------------------- */
-	$('.selftext').each(function() {
-		var $this = $(this),
-			$button = $this.find('.show-full'),
-			height = $this.outerHeight();
+	// $('.selftext').each(function() {
+	// 	var $this = $(this),
+	// 		$button = $this.find('.show-full'),
+	// 		height = $this.outerHeight();
 
-		if (height > 250) {
-			$this.height(250);
-			$button.show().on('click', function() {
-				$(this).fadeOut().closest('.selftext').css('height', height);
-			});
-		}
-	});
+	// 	if (height > 250) {
+	// 		$this.height(250);
+	// 		$button.show().on('click', function() {
+	// 			$(this).fadeOut().closest('.selftext').css('height', height);
+	// 		});
+	// 	}
+	// });
 
 
 });

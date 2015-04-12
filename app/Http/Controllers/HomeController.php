@@ -1,13 +1,17 @@
-<?php 
-
-namespace App\Http\Controllers;
+<?php namespace App\Http\Controllers;
 
 use Config;
 use Request;
 use Route;
 use Session;
 use App\Reddit;
+use App\User;
 
+/**
+ * @todo  detect Post Type for Sounds (soundcloud,...)
+ * @todo  rich Schema for post types
+ * @todo  JS unveil for oembed images
+ */
 
 class HomeController extends Controller {
 
@@ -15,18 +19,20 @@ class HomeController extends Controller {
 	public function __construct()
 	{
 
+		parent::__construct();
+
 		// get route parameters
 		$this->params = Route::current()->parameters();
 		$this->previousPage = Session::has('previousPage') ? Session::get('previousPage') : null;
 
 		// assign parameters
-		$this->subreddit = isset($this->params['subreddit']) ? $this->params['subreddit'] : null;
-		$this->page = Request::has('p') ? Request::get('p') : 1;
-		$this->sort = isset($this->params['sort']) ? $this->params['sort'] : null;
-		$this->time = isset($this->params['time']) ? $this->params['time'] : null;
-		$this->limit = Config::get('reddit.limit');
-		$this->after = Session::has('after') ? Session::get('after') : null;
-		$this->before = Session::has('before') ? Session::get('before') : null;
+		$this->limit 		= null;
+		$this->subreddit 	= isset($this->params['subreddit']) ? $this->params['subreddit'] : null;
+		$this->sort 		= isset($this->params['sort']) ? $this->params['sort'] : null;
+		$this->time 		= isset($this->params['time']) ? $this->params['time'] : null;
+		$this->page 		= Request::has('p') ? Request::get('p') : 1;
+		$this->after 		= Session::has('after') ? Session::get('after') : null;
+		$this->before 		= Session::has('before') ? Session::get('before') : null;
 
 		// url for the next page
 		$this->url = $this->subreddit ? '/r/' . $this->subreddit : '';
@@ -35,22 +41,15 @@ class HomeController extends Controller {
 		view()->share('subreddit', $this->subreddit);
 		view()->share('page', $this->page);
 		view()->share('sort', $this->sort);
-		view()->share('sortFrom', $this->time);
+		view()->share('sortSince', $this->time);
 		view()->share('url', $this->url);
-
-		// share view name
-		// @todo: move that to a config or filter file
-		view()->composer(['index', 'single'], function($view){
-		    view()->share('viewName', $view->getName());
-		});
 
 	}
 
-
 	/**
-	 * Show the homepage
+	 * Show subreddit/index page
 	 *
-	 * @return view
+	 * @return View
 	 */
 	public function getIndex()
 	{
@@ -79,11 +78,10 @@ class HomeController extends Controller {
 
 	}
 
-
 	/**
 	 * Redirect to subreddit from the header form
 	 *
-	 * @return
+	 * @return View
 	 */
 	public function formToSubreddit()
 	{
@@ -94,15 +92,15 @@ class HomeController extends Controller {
 			return redirect('r/' . $subreddit);
 		}
 
-		return $this->index();
+		return $this->getIndex();
 
 	}
 
-
 	/**
-	 * [single description]
-	 * @param  [type] $id [description]
-	 * @return [type]     [description]
+	 * Show single post page
+	 *
+	 * @param  string $id
+	 * @return View
 	 */
 	public function getSingle($id = null)
 	{

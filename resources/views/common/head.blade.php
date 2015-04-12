@@ -12,6 +12,8 @@
 
 {{-- css --}}
 <link href="{{ url('/assets/css/semantic.min.css') }}" rel="stylesheet">
+<link href="{{ url('/assets/css/fa.css') }}" rel="stylesheet">
+<link href="{{ url('/assets/css/grid.css') }}" rel="stylesheet">
 <link href="{{ url('/assets/css/main.css') }}" rel="stylesheet">
 
 {{-- fonts --}}

@@ -36,6 +36,7 @@
  * @TODO improve watch / browsersync synergy
  * @TODO fix csslint
  * @TODO fix concat paths with cwd
+ * @TODO fix serve task
  */
 
 module.exports = function (grunt) {
@@ -246,9 +247,9 @@ module.exports = function (grunt) {
 
             server: {
                 options: {
-                    base: 'public',
-                    hostname: '127.0.0.1',
-                    port: 9000,
+                    base: '<%= server.base %>',
+                    hostname: '<%= server.hostname %>',
+                    port: '<%= server.port %>',
                     keepalive: true,
                     open: true,
                 }
@@ -281,33 +282,16 @@ module.exports = function (grunt) {
         watch: {
 
             options: {
-                livereload: '<%= server.livereload %>',
+                livereload: false,
                 livereloadOnError: false
             },
 
             less: {
-                files: '<%= watch.less %>',
+                files: '<%= dir.src %>/less/**/*.less',
                 tasks: [
                     'shell:clear',
                     'notify:watch',
                     'css',
-                ]
-            },
-
-            php: {
-                files: '<%= watch.php %>',
-                tasks: [
-                    'shell:clear',
-                    'notify:watch',
-                ]
-            },
-
-            js: {
-                files: '<%= watch.js %>',
-                tasks: [
-                    'shell:clear',
-                    'notify:watch',
-                    'js',
                 ]
             },
 
@@ -325,6 +309,20 @@ module.exports = function (grunt) {
         }, // concurrent
 
         notify: {
+
+            js: {
+                options: {
+                    title: 'JS task complete',
+                    message: '...',
+                }
+            },
+
+            css: {
+                options: {
+                    title: 'CSS task complete',
+                    message: '...',
+                }
+            },
 
             dev: {
                 options: {
@@ -413,33 +411,19 @@ module.exports = function (grunt) {
 
         }, // bump
 
-        wow: {
-            target: {
-                options: {
-                    source: [
-                        'You are {buzz} amazing.',
-                        'Damn! you got {adj} game.',
-                        'You lucky {adj} lad !',
-                        'That was a great move, {adj} {noun}',
-                        'On a scale of 1 to ten, I would give you {num}'
-                    ]
-                }
-            },
-        }, // wow
-
     };
 
     require('load-grunt-tasks')(grunt);
-    // require('time-grunt')(grunt);
+    require('time-grunt')(grunt);
     grunt.initConfig(grunt.util._.extend(taskConfig, userConfig));
 
     /* ======================================================
     *  Tasks registration
     *  =====================================================*/
 
-    grunt.registerTask('css', [ 'less:dev', 'autoprefixer', /*'csslint'*/ ]);
+    grunt.registerTask('css', [ 'less:dev',/* 'autoprefixer'*/, 'notify:css' /*'csslint'*/ ]);
 
-    grunt.registerTask('js', [ 'jshint', 'concat' ]);
+    grunt.registerTask('js', [ 'jshint', 'concat', 'notify:js' ]);
 
     grunt.registerTask('images', [ 'imagemin' ]);
 
@@ -449,7 +433,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('doc', [ 'yuidoc', 'open:doc' ]);
 
-    grunt.registerTask('serve', [ 'php:server', 'browserSync', /*'watch'*/ ]);
+    grunt.registerTask('serve', [ 'php:server', 'browserSync', 'watch' ]);
 
     grunt.registerTask('default', [ 'dev' ]);
 

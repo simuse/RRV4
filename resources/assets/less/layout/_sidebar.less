@@ -2,81 +2,85 @@
 *  Sidebar
 *  =====================================================*/
 
-@sidebar-bg: @gray;
-@sidebar-color: #fff;
-
-.sidebar {
-	.transition(left 250ms ease-out);
-	background-color: @sidebar-bg;
-	color: #fff;
-	left: -@sidebar-width;
-	height: 100%;
-	position: fixed;
-	top: @navbar-height;
-	width: @sidebar-width;
-	z-index: @zindex-navbar;
-
-	&.open {
-		left: 0;
-	}
+#sidebar {
+	margin-top: 42px !important;
 }
 
-.sidebar-form {
-	padding: 15px;
-}
+// @sidebar-bg: @gray;
+// @sidebar-color: #fff;
 
-/* sidebar-nav
----------------------------------------------- */
-.sidebar-nav {
-	> li {
-		> a {
-			border-top: 1px solid lighten(@sidebar-bg, 5%);
-			color: @sidebar-color;
+// .sidebar {
+// 	.transition(left 250ms ease-out);
+// 	background-color: @sidebar-bg;
+// 	color: #fff;
+// 	left: -@sidebar-width;
+// 	height: 100%;
+// 	position: fixed;
+// 	top: @navbar-height;
+// 	width: @sidebar-width;
+// 	z-index: @zindex-navbar;
 
-			&:hover,
-			&:focus {
-				background: lighten(@sidebar-bg, 5%);
-			}
+// 	&.open {
+// 		left: 0;
+// 	}
+// }
 
-			&:last-child {
-				border-bottom: 1px solid lighten(@sidebar-bg, 5%);
-			}
+// .sidebar-form {
+// 	padding: 15px;
+// }
 
-			.caret {
-				.rotate(180deg);
-				.transition(transform 250ms ease-out);
-			}
+// /* sidebar-nav
+// ---------------------------------------------- */
+// .sidebar-nav {
+// 	> li {
+// 		> a {
+// 			border-top: 1px solid lighten(@sidebar-bg, 5%);
+// 			color: @sidebar-color;
 
-			&.collapsed {
-				.caret {
-					.rotate(0);
-				}
-			}
-		}
-	}
+// 			&:hover,
+// 			&:focus {
+// 				background: lighten(@sidebar-bg, 5%);
+// 			}
 
-	.caret {
-		float: right;
-		margin-top: 7px;
-	}
-}
+// 			&:last-child {
+// 				border-bottom: 1px solid lighten(@sidebar-bg, 5%);
+// 			}
 
-/* sidebar-subnav
----------------------------------------------- */
-.sidebar-subnav {
-	list-style: circle !important;
+// 			.caret {
+// 				.rotate(180deg);
+// 				.transition(transform 250ms ease-out);
+// 			}
 
-	> li {
-		> a {
-			color: #fff;
-			padding-left: 30px;
+// 			&.collapsed {
+// 				.caret {
+// 					.rotate(0);
+// 				}
+// 			}
+// 		}
+// 	}
 
-			&:hover {
-				background-color: @gray-light;
-			}
-		}
-	}
-}
+// 	.caret {
+// 		float: right;
+// 		margin-top: 7px;
+// 	}
+// }
+
+// /* sidebar-subnav
+// ---------------------------------------------- */
+// .sidebar-subnav {
+// 	list-style: circle !important;
+
+// 	> li {
+// 		> a {
+// 			color: #fff;
+// 			padding-left: 30px;
+
+// 			&:hover {
+// 				background-color: @gray-light;
+// 			}
+// 		}
+// 	}
+// }
 
 
 

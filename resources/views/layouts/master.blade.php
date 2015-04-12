@@ -3,16 +3,26 @@
 <head>
 	@include('common.head')
 </head>
-<body>
+<body class="{{ 'view-' . $viewName }} pushable">
 
-	@yield('header')
+	@include('common.header')
 
-	<div class="wrap" role="document">
+	@include('common.sidebar')
 
-		@yield('content')
+	<div class="wrap pusher" role="document">
+
+		<main class="main" role="main">
+			@include('common.notifications')
+
+			@yield('content')
+
+		</main>
 
 	</div>
 
+	@include('modals.login')
+
 	@include('common.scripts')
+
 </body>
 </html>

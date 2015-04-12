@@ -2,63 +2,135 @@
 *  Header
 *  =====================================================*/
 
-.navbar-fixed-top {
-	margin-bottom: 0;
-}
+.main-header {
+	left: 0;
+	position: fixed;
+	right: 0;
+	top: 0;
+	z-index: 101;
 
-.navbar-brand {
-	padding: 15px;
-}
+	.ui.button {
+		margin: 0;
 
-.navbar-header {
-	float: left;
-}
+		&.disabled {
+			color: #5e5f60 !important;
+			opacity: 1 !important;
+		}
 
-.navbar-right {
-	float: right;
-	margin: 0 15px 0 0 !important;
+		&:hover {
+			background: rgba(255,255,255,.1);
+		}
+	}
 
-	> li {
-		float: left;
+	.ui.menu {
+		.clearfix;
+		border-radius: 0;
+		margin-bottom: 0;
+		margin-top: 0;
 
-		> a {
-			padding-top: 15px;
-			padding-bottom: 15px;
+		.dropdown.item .menu {
+			margin-top: -1px;
+		}
+
+		.item-form {
+			height: 40px;
+			padding: 0;
+		}
+	}
+
+	#modal-login {
+		.fa {
+			margin-left: 11px;
 		}
 	}
 }
 
-/* 	nav
----------------------------------------------- */
-.navbar-nav {
-	> li {
-		a > {
-			&.disabled {
-				color: @gray-light;
-				cursor: auto;
-				pointer-events: none;
+#menu-secondary {
+
+	> .dropdown {
+
+		> .fa {
+			margin-left: 5px;
+		}
+
+		> .menu {
+			left: -1px;
+			width: 140px;
+
+			> .item {
+				padding-left: 25px !important;
+
+				> .fa {
+					float: left;
+					margin-left: -15px;
+				}
+			}
+
+			> .dropdown > .menu {
+				left: auto !important;
+				right: 100% !important;
 			}
 		}
 	}
+
+	.ui.icon.buttons {
+		.button {
+			padding: 6px 10px;
+		}
+	}
+
+	// 5px 10px 5px 15px
 }
 
-/* sidebar-toggle
----------------------------------------------- */
-.sidebar-toggle {
-	background-color: @gray-lighter;
-	border-right: 1px solid @gray-light;
-	color: @text-color;
-	display: block;
-	float: left;
-	font-size: 24px;
-	height: @navbar-height;
-	padding: 8px 15px;
+.form-header {
 
-	&:hover,
-	&:focus,
-	&.active {
-		background-color: @gray;
-		color: @gray-light;
-		text-decoration: none;
+	width: 290px;
+
+	input,
+	> i {
+		color: #fff !important;
 	}
+
+	.input {
+		display: block;
+		margin: 0;
+		padding: 0;
+
+		input {
+			border-radius: 0;
+			float: left;
+			padding: 10px !important;
+			width: 250px;
+
+			&:focus,
+			&:hover {
+				background: rgba(255, 255, 255, 0.1) !important;
+			}
+		}
+	}
+
+	button {
+		color: #fff !important;
+		float: right;
+		font-size: 1.125rem !important;
+		width: 40px;
+	}
+
+	::-webkit-input-placeholder {
+	   color: #fff !important;
+	   opacity: 1;
+	}
+	:-moz-placeholder {
+	   color: #fff !important;
+	   opacity: 1;
+	}
+	::-moz-placeholder {
+	   color: #fff !important;
+	   opacity: 1;
+	}
+	:-ms-input-placeholder {
+	   color: #fff !important;
+	   opacity: 1;
+	}
+
 }

@@ -1,7 +1,8 @@
 <?php namespace App\Http\Middleware;
 
+use Config;
 use Closure;
-use Illuminate\Contracts\Auth\Guard;
+use \App\User;
 
 class Authenticate {
 
@@ -18,9 +19,12 @@ class Authenticate {
 	 * @param  Guard  $auth
 	 * @return void
 	 */
-	public function __construct(Guard $auth)
+	public function __construct()
 	{
-		$this->auth = $auth;
+
+		// $user = new User();
+
+		// dd($user);
 	}
 
 	/**
@@ -32,17 +36,17 @@ class Authenticate {
 	 */
 	public function handle($request, Closure $next)
 	{
-		if ($this->auth->guest())
-		{
-			if ($request->ajax())
-			{
-				return response('Unauthorized.', 401);
-			}
-			else
-			{
-				return redirect()->guest('auth/login');
-			}
-		}
+		// if ($this->auth->guest())
+		// {
+		// 	if ($request->ajax())
+		// 	{
+		// 		return response('Unauthorized.', 401);
+		// 	}
+		// 	else
+		// 	{
+		// 		return redirect()->guest('auth/login');
+		// 	}
+		// }
 
 		return $next($request);
 	}

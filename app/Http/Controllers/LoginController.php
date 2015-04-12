@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Http\Controllers;
 
@@ -15,55 +15,55 @@ class LoginController extends Controller {
 	public function __construct()
 	{
 
-		view()->composer(['login'], function($view){
-		    view()->share('viewName', $view->getName());
-		});
-
 	}
-
 
 	/**
-	 * [getLogin description]
-	 * @return [type]
+	 * Authorize User via Reddit
+	 *
+	 * @return void
 	 */
-	public function getLogin()
+	public function authorize()
 	{
 
-		// make view
-		$data = array();
-
-		return view('login')->with('data', $data);
+		User::authorize();
 
 	}
-
 
 	/**
-	 * [postLogin description]
-	 * @todo  : better way to attach params to a URL
-	 * @todo  : better random string
-	 * @return [type]
+	 * Get and save the Access Token
+	 *
+	 * @return Redirect
 	 */
-	public function postLogin()
+	public function getToken()
 	{
 
-		// get input
-		$u = Request::input('username');
-		$p = Request::input('password');
+		if (Request::has('state') && Request::has('code')) {
 
-		// user
-		$user = new User();
-		$response = $user->login($u, $p);
+			$user = new User();
+			$token = $user->setToken(Request::get('code'));
+			if ($token) return redirect('/')->with('notification', 'Login successful');
 
-		d($response);
+		} else if (Request::has('error')) {
+			return redirect('/')->withError('Login failed: you denied access to Reddit');
+		}
 
-		// make view
-		$data = array();
-
-		// return view('login')->with('data', $data);
+		return redirect('/')->withError('Login failed: unknown reason');
 
 	}
 
+	/**
+	 * Logout
+	 *
+	 * @return Redirect
+	 */
+	public function logout()
+	{
 
+		User::revokeToken();
+
+		return redirect('/')->with('notification', 'Logged out');
+
+	}
 
 }
 

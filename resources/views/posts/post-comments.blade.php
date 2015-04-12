@@ -1,31 +1,11 @@
-<br>
-
-{{-- reply form --}}
-<form class="ui reply form">
-
-	<div class="field">
-		<textarea placeholder="Your comment" style="height: 4em; min-height: 3em"></textarea>
-	</div>
-
-	<div class="ui blue labeled submit icon button">
-		<i class="icon edit"></i>
-		Reply
-	</div>
-
-</form>
-
-<br>
-<hr>
-<br>
-
 @if (!empty($comments))
-{{-- grid --}}
-<div class="ui grid">
+
+<div class="row">
 
 	{{-- comments --}}
-	<div class="twelve wide column">
+	<div class="col-xs-9">
 
-		<div class="ui threaded comments" style="max-width: none">
+		<div class="ui threaded comments">
 
 			@foreach ($comments as $key => $comment)
 
@@ -38,7 +18,7 @@
 	</div>
 
 	{{-- menu --}}
-    <div class="four wide column">
+    <div class="col-xs-3">
 
 		<div class="ui small vertical menu fluid">
 
@@ -60,6 +40,5 @@
     </div>
 
 </div>
-
 
 @endif

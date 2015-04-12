@@ -12,9 +12,13 @@
 */
 
 
-// user
-Route::get('/login',						'LoginController@getLogin');
-Route::post('/login',						'LoginController@postLogin');
+// login
+Route::get('auth',	 						'LoginController@getToken');
+Route::post('auth', 						'LoginController@authorize');
+Route::get('logout',	 					'LoginController@logout');
+
+// users
+Route::get('/u/{user}', 					'ProfileController@getProfile');
 
 // single post
 Route::get('/p/{id}',						'HomeController@getSingle');

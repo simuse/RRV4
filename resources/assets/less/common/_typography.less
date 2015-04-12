@@ -28,7 +28,9 @@ h6 {}
 
 // Paragraphs
 p {
-	a { // Increase clickable area on links / http://joshnh.com/2012/09/06/increasing-the-clickable-area-of-inline-links/
+	word-wrap: break-word;
+
+	a {
     	margin: -.5em;
 	    padding: .5em;
 	    position: relative;
@@ -43,6 +45,10 @@ a {
   	&:hover, &:focus {
     	outline: none;
   	}
+}
+
+i.fa {
+	font-family: 'FontAwesome' !important;
 }
 
 // Lists

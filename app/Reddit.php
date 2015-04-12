@@ -1,36 +1,39 @@
-<?php 
+<?php
 
 namespace App;
 
 use Config;
+use Request;
+use Session;
 use Embed\Embed;
-// use Essence\Essence;
 use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Model;
+use App\Classes\Helpers;
 
 
 class Reddit extends Model {
-
 
 	public function __construct()
 	{
 
 		$this->client = new Client();
 		$this->embed = new Embed();
+		$this->page = Request::get('p');
+		$this->previousPage = Session::get('previousPage');
 
 	}
 
-
 	/**
-	 * [getPost description]
-	 * @param  [type]
-	 * @return [type]
+	 * Single post data
+	 *
+	 * @param 	string $id
+	 * @return 	array
 	 */
 	public function getPost($id)
 	{
-		
+
 		// making the request
-		$query = sprintf(Config::get('reddit.host') . '/comments/%s.json', $id);
+		$query = sprintf(Config::get('reddit.api.host') . '/comments/%s.json', $id);
 	    $response = $this->client->get($query);
 
 	    // check the response
@@ -43,34 +46,32 @@ class Reddit extends Model {
 		$post = $json[0]['data']['children'][0]['data'];
 		$comments = $json[1]['data']['children'];
 		$post['type'] = $this->getPostType($post);
-		$post['timeago'] = $this->timeAgo($post['created_utc']);
+		$post['timeago'] = Helpers::timeAgo($post['created_utc']);
 
-		$formatted = array(
+	    return array(
 			'comments'  => $comments,
-			'post' 		=> $post,
+			'post' 		=> $post
 		);
-
-	    return $formatted;
 
 	}
 
-
 	/**
-	 * [getPosts description]
-	 * @param  [type]
-	 * @param  [type]
-	 * @param  [type]
-	 * @param  [type]
-	 * @param  [type]
-	 * @return [type]
+	 * Collection of posts
+	 *
+	 * @param  string 	$subreddit
+	 * @param  int 		$page
+	 * @param  string 	$sort
+	 * @param  string 	$time
+	 * @param  int 		$limit
+	 * @return posts
 	 */
 	public function getPosts($subreddit = null, $page = null, $sort = null, $time = null, $limit = null)
 	{
-		
+
 		// basic params
-		$subreddit  = (!empty($subreddit)) ? $subreddit : Config::get('reddit.defaultSubreddit');
-		$sort    	= (!empty($sort)) ? $sort : Config::get('reddit.sort');
-		$limit   	= (!empty($limit)) ? $limit : Config::get('reddit.limit');
+		$subreddit  = (!empty($subreddit)) ? $subreddit : Config::get('reddit.defaults.subreddit');
+		$sort    	= (!empty($sort)) ? $sort : Config::get('reddit.defaults.sort');
+		$limit   	= (!empty($limit)) ? $limit : Config::get('reddit.defaults.limit');
 	    $qTime	 	= (!empty($time)) ? '&t=' . $time : '';
 
 	    // delimiter params
@@ -82,9 +83,9 @@ class Reddit extends Model {
 	    }
 
 	    // making the request
-	    $query = sprintf(Config::get('reddit.host') . '/r/%s/%s.json?%s&limit=%d%s', $subreddit, $sort, $qTime, $limit, $delimiter);
+	    $query = sprintf(Config::get('reddit.api.host') . '/r/%s/%s.json?%s&limit=%d%s', $subreddit, $sort, $qTime, $limit, $delimiter);
 	    $response = $this->client->get($query);
-	    
+
 	    // check the response
 	    if ($response->getReasonPhrase() !== 'OK') {
 	    	return null;
@@ -92,35 +93,34 @@ class Reddit extends Model {
 
 	    // format the response
 	    $json = $response->json();
-		$posts = $json['data'];
+		$data = $json['data'];
 
-		$formatted = array(
-			'after'  => $posts['after'],
-			'before' => $posts['before'],
+		$posts = array(
+			'after'  => $data['after'],
+			'before' => $data['before'],
 			'posts'  => array(),
 		);
 
-		foreach ($posts['children'] as $key => $value) {
+		foreach ($data['children'] as $key => $value) {
 			$post = $value['data'];
 			$post['type'] = $this->getPostType($post);
-			$post['timeago'] = $this->timeAgo($post['created_utc']);
-			array_push($formatted['posts'], $post);
+			$post['timeago'] = Helpers::timeago($post['created_utc']);
+			array_push($posts['posts'], $post);
 		}
 
-		return $formatted;
+		return $posts;
 
 	}
 
-
 	/**
-	 * Deduct post type from post data object
+	 * Find the post type from a post object
+	 *
 	 * @todo move all regexes into config file
-	 * @todo check this case: 'http://imgur.com/VSor1R7/.jpg'
+	 * @todo check case: 'http://imgur.com/VSor1R7/.jpg'
 	 * @todo gifv imgur
 	 *
-	 * @param  [object] $post [post object]
-	 *
-	 * @return [string]       [post type]
+	 * @param  obj $post
+	 * @return string
 	 */
 	public function getPostType(&$post)
 	{
@@ -130,7 +130,7 @@ class Reddit extends Model {
 		$extension = substr(strrchr($post['url'], '.'), 1);
 
 		// image
-		foreach (Config::get('reddit.imageFormats') as $key => $value) {
+		foreach (Config::get('reddit.formats.image') as $key => $value) {
 			if ($extension === $value) {
 				if ($extension === 'gif') {
 					return 'gif';
@@ -206,43 +206,65 @@ class Reddit extends Model {
 
 		return null;
 
-
 	}
-
 
 	/**
-	 * Turn timestamp into human-readable time diffence
-	 *
-	 * @param  time $time [time]
-	 *
-	 * @return string     [time ago]
+	 * User public data
+	 * @param  string $user [description]
+	 * @return [type]       [description]
 	 */
-	public function timeAgo($time)
+	public function getUser($user = '')
 	{
 
-		$time = time() - $time;
+		$userData = array();
 
-	    $tokens = array (
-	        31536000 => 'year',
-	        2592000 => 'month',
-	        604800 => 'week',
-	        86400 => 'day',
-	        3600 => 'hour',
-	        60 => 'minute',
-	        1 => 'second'
-	    );
-
-	    foreach ($tokens as $unit => $text) {
-
-	        if ($time < $unit) continue;
-
-	        $numberOfUnits = floor($time / $unit);
-
-	        return $numberOfUnits . ' ' . $text . (($numberOfUnits>1) ? 's' : '');
-
+		// about
+	    $query = sprintf(Config::get('reddit.api.host') . '/user/%s/about.json', $user);
+	    $response = $this->client->get($query);
+	    if ($response->getReasonPhrase() === 'OK') {
+	    	$json = $response->json();
+	    	$userData['about'] = $json['data'];
 	    }
+
+	    // submitted
+	    $query = sprintf(Config::get('reddit.api.host') . '/user/%s/submitted.json', $user);
+	    $response = $this->client->get($query);
+	    if ($response->getReasonPhrase() === 'OK') {
+	    	$json = $response->json();
+
+	    	// format posts
+	    	$posts = [];
+	    	foreach ($json['data']['children'] as $key => $value) {
+	    		$post = $value['data'];
+				$post['type'] = $this->getPostType($post);
+				$post['timeago'] = Helpers::timeago($post['created_utc']);
+				array_push($posts, $post);
+	    	}
+
+	    	$userData['submitted'] = $posts;
+	    }
+
+	    // comments
+	    $query = sprintf(Config::get('reddit.api.host') . '/user/%s/comments.json', $user);
+	    $response = $this->client->get($query);
+	    if ($response->getReasonPhrase() === 'OK') {
+	    	$json = $response->json();
+
+	    	// format comments
+	    	$comments = [];
+	    	foreach ($json['data']['children'] as $key => $value) {
+	    		$comment = $value['data'];
+				$comment['timeago'] = Helpers::timeago($comment['created_utc']);
+				array_push($comments, $comment);
+	    	}
+
+	    	$userData['comments'] = $comments;
+	    }
+
+		return $userData;
+
 	}
-	
+
 }
 
 

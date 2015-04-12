@@ -3,16 +3,26 @@
 <head>
 	<?php echo $__env->make('common.head', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 </head>
-<body>
+<body class="<?php echo e('view-' . $viewName); ?> pushable">
 
-	<?php echo $__env->yieldContent('header'); ?>
+	<?php echo $__env->make('common.header', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 
-	<div class="wrap" role="document">
+	<?php echo $__env->make('common.sidebar', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 
-		<?php echo $__env->yieldContent('content'); ?>
+	<div class="wrap pusher" role="document">
+
+		<main class="main" role="main">
+			<?php echo $__env->make('common.notifications', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+
+			<?php echo $__env->yieldContent('content'); ?>
+
+		</main>
 
 	</div>
 
+	<?php echo $__env->make('modals.login', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+
 	<?php echo $__env->make('common.scripts', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+
 </body>
 </html>

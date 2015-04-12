@@ -1,23 +1,32 @@
-<?php $__env->startSection('header'); ?>
+<?php
 
-	<?php echo $__env->make('common.header.index', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+$post 		= $data['post'];
+$comments 	= $data['comments'];
 
-<?php $__env->stopSection(); ?>
+?>
+
+
 
 <?php $__env->startSection('content'); ?>
 
 	<div id="posts">
 
-		<?php
-			$post = $data['post'];
-			$comments = $data['comments'];
-		?>
-
 		<?php echo $__env->make('posts.post', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+
+	</div>
+
+	<div id="reply">
+
+		<?php echo $__env->make('posts.post-reply', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+
+	</div>
+
+	<div id="comments">
 
 		<?php echo $__env->make('posts.post-comments', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 
 	</div>
+
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
