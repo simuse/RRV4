@@ -2,7 +2,7 @@
 
 ## Controllers
 - separate AuthModel & UserModel
-- Login
+- Unfound subreddit
 
 ## Views
 - header: disable "next" button on last page

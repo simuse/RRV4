@@ -130,17 +130,11 @@ class Reddit extends Model {
 		$extension = substr(strrchr($post['url'], '.'), 1);
 
 		// image
-		foreach (Config::get('reddit.formats.image') as $key => $value) {
-			if ($extension === $value) {
-				if ($extension === 'gif') {
-					return 'gif';
-				}
-				if ($extension === 'gifv') {
-					$post['url'] = substr($url, 0, -1);
-					return 'gif';
-				}
-				return 'image';
+		if (in_array($extension, Config::get('reddit.formats.image'))) {
+			if ($extension === 'gif') {
+				return 'gif';
 			}
+			return 'image';
 		}
 
 		// imgur

@@ -3,13 +3,27 @@ missing/implicit information
 canonical references
  --}}
 
+<?php
+
+$icon = 'image';
+
+if ($post['type'] === 'video') {
+	$icon = 'video-camera';
+} else if ($post['type'] === 'reddit') {
+	$icon = 'reddit';
+} else if ($post['type'] === 'text') {
+	$icon = 'text';
+}
+
+?>
+
 <div class="post-heading">
 
 	<div class="header">
 		<a class="post-title" href="/p/{{ $post['id'] }}" itemprop="name url headline discussionUrl">
 			{{ $post['title'] }}
 		</a>
-		<i class="post-type fa fa-image pull-right" title="post-type"></i>
+		<i class="post-type fa fa-{{ $icon }} pull-right" title="post-type"></i>
 	</div>
 
 	<div class="meta">

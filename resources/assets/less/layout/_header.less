@@ -2,6 +2,8 @@
 *  Header
 *  =====================================================*/
 
+/* Main
+---------------------------------------------- */
 .main-header {
 	left: 0;
 	position: fixed;
@@ -28,6 +30,7 @@
 		margin-bottom: 0;
 		margin-top: 0;
 
+		.header.item,
 		.dropdown.item .menu {
 			margin-top: -1px;
 		}
@@ -45,6 +48,8 @@
 	}
 }
 
+/* Menu Secondary
+---------------------------------------------- */
 #menu-secondary {
 
 	> .dropdown {
@@ -76,12 +81,16 @@
 	.ui.icon.buttons {
 		.button {
 			padding: 6px 10px;
+
+			&:hover {
+				background: #bbb;
+			}
 		}
 	}
-
-	// 5px 10px 5px 15px
 }
 
+/* Form Header
+---------------------------------------------- */
 .form-header {
 
 	width: 290px;
@@ -134,3 +143,37 @@
 	}
 
 }
+
+/* Autocomplete
+---------------------------------------------- */
+._ac-wrap {
+
+	._ac-results {
+		margin-top: 40px;
+		width: 250px;
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -13,7 +13,7 @@ module.exports = {
         root:       'public',
         dist:       'public/assets',
         src:        'resources/assets',
-        pkg:        'resources/assets/packages',
+        pkg:        'resources/assets/bower_components',
         docs:       'resources/docs',
         reports:    'resources/reports',
         views:      'resources/views',
@@ -83,10 +83,9 @@ module.exports = {
                 '<%= dir.pkg %>/fancybox/source/jquery.fancybox.js',
                 '<%= dir.pkg %>/isotope/dist/isotope.pkgd.js',
                 '<%= dir.pkg %>/unveil/jquery.unveil.js',
+                '<%= dir.pkg %>/autocompeter/public/dist/autocompeter.js',
                 // '<%= dir.pkg %>/imagesloaded/imagesloaded.pkgd.js',
                 // '<%= dir.pkg %>/jquery-mousewheel/jquery.mousewheel.js',
-                // '<%= dir.pkg %>/freezeframe/freezeframe.js',
-                // '<%= dir.pkg %>/gifplayer/js/jquery.gifplayer.js',
 
             ],
 

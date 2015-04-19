@@ -23,7 +23,7 @@
 		src="{{ $post['url'] }}" itemprop="embedUrl">
 	</iframe>
 
-{{-- self --}}
+{{-- reddit --}}
 @elseif ($type === 'reddit')
 
 	@if (!empty($post['selftext']))

@@ -1,0 +1,41 @@
+{
+  "name": "autocompeter",
+  "version": "1.1.11",
+  "homepage": "https://autocompeter.com",
+  "authors": [
+    "Peter Bengtsson <mail@peterbe.com>"
+  ],
+  "description": "A really fast AJAX autocomplete service and widget",
+  "main": [
+    "public/dist/autocompeter.min.js",
+    "public/dist/autocompeter.min.css"
+  ],
+  "keywords": [
+    "autocomplete",
+    "livesearch"
+  ],
+  "license": "BSD",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "sampleloader",
+    "public/README.md",
+    "public/examples",
+    "public/js",
+    "public/css",
+    "public/img",
+    "public/fonts",
+    "public/font-awesome",
+    ".gitignore",
+    "LICENSE",
+    ".travis.yml",
+    "requirements.txt",
+    "gulpfile.js",
+    "package.json",
+    "*.go",
+    "templates",
+    "src",
+    "*.py"
+  ]
+}

@@ -13,7 +13,7 @@
 	// display: none !important;
 }
 
-/* Layout
+/* Base
 ---------------------------------------------- */
 #posts {
 	.clearfix;
@@ -31,6 +31,9 @@
 		}
 	}
 }
+
+/* Isotope
+---------------------------------------------- */
 
 .post.isotope {
 	margin-bottom: 15px;
@@ -119,6 +122,15 @@
 		top: 10px;
 	}
 
+	.post-subreddit {
+		padding-left: 0;
+		padding-right: 0;
+	}
+
+	.post-score {
+		margin: 0 6px !important;
+	}
+
 	.card .meta {
 		.clearfix;
 		a {
@@ -149,13 +161,6 @@
 	padding: 0;
 }
 
-.post-type-reddit,
-.post-type-oembed {
-	.post-content {
-		padding: 15px;
-	}
-}
-
 /* Post types
 ---------------------------------------------- */
 .post-image {
@@ -167,6 +172,22 @@
 		margin: 0 auto;
 		opacity: 0;
 		height: auto;
+	}
+}
+
+.post-type-reddit {
+	.selftext {
+		padding: 15px;
+
+		&:empty {
+			padding: 0;
+		}
+	}
+}
+
+.post-type-oembed {
+	.post-content {
+		padding: 15px;
 	}
 }
 

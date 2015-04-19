@@ -26,6 +26,12 @@ jQuery(document).ready(function($) {
 		$('#sidebar').sidebar('toggle');
 	});
 
+	/* Header - Autocomplete
+	---------------------------------------------- */
+	Autocompeter(document.getElementById('input-subreddit'), {
+		number: 20
+	});
+
 	/* Sidebar - Open login form
 	---------------------------------------------- */
   	$('#modal-login').on('click', function() {
@@ -51,6 +57,11 @@ jQuery(document).ready(function($) {
 		closeBtn: false,
 		margin: 15,
 		mouseWheel: true,
+		helpers: {
+			overlay: {
+				locked: false
+			}
+		}
 	});
 
 	/* Posts - Toggle Layout

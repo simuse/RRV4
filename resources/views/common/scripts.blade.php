@@ -11,6 +11,7 @@ window.settings = {
 
 </script>
 
+{{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> --}}
 <script src="{{ url('/assets/js/jquery.min.js') }}"></script>
 <script src="{{ url('/assets/js/plugins.js') }}"></script>
 <script src="{{ url('/assets/js/main.js') }}"></script>
