@@ -1,46 +1,73 @@
 /* ======================================================
 *  Scripts
-*
-* @todo GridMode : show meta on hover
-*
 *  =====================================================*/
 
 jQuery(document).ready(function($) {
 
-	/* Common - Get User settings via Cookies
-	---------------------------------------------- */
-	if (readCookie('layout')) {
-		window.settings.layout = readCookie('layout');
-	}
+	var $win = $(window),
+		$body = $('body'),
+		winH = $win.height();
+
+	$win.on('resize', function() {
+		winH = $win.height();
+	});
+
+/* ======================================================
+*  Common
+*  =====================================================*/
 
 	/* Common - Init dropdowns
 	---------------------------------------------- */
 	$('.dropdown').dropdown({
-	    transition: 'fade down'
+	    transition: 'scale'
 	});
+
+	/* Common - Init popups
+	---------------------------------------------- */
+	$('.toggle-popup').popup({
+    	on: 'click'
+  	});
+
+/* ======================================================
+*  Header
+*  =====================================================*/
 
 	/* Header - Toggle Sidebar
 	---------------------------------------------- */
 	$('#sidebar-toggle').on('click', function(e) {
 		e.preventDefault();
-		$('#sidebar').sidebar('toggle');
+		$('#sidebar').sidebar('setting', 'transition', 'overlay').sidebar('toggle');
 	});
+
+	/* Header - Open Login modal
+	---------------------------------------------- */
+  	$('#toggle-modal-login').on('click', function() {
+  		$('#modal-login').modal().modal('show');
+  	});
 
 	/* Header - Autocomplete
 	---------------------------------------------- */
-	Autocompeter(document.getElementById('input-subreddit'), {
-		number: 20
-	});
+	// Autocompeter(document.getElementById('input-subreddit'), {
+	// 	number: 20
+	// });
 
-	/* Sidebar - Open login form
+/* ======================================================
+*  Sidebar
+*  =====================================================*/
+
+  	/* Sidebar - Open About modal
 	---------------------------------------------- */
-  	$('#modal-login').on('click', function() {
-  		$('.ui.modal').modal().modal('show');
+  	$('#toggle-modal-about').on('click', function() {
+  		$('#modal-about').modal().modal('show');
   	});
+
+/* ======================================================
+*  Posts
+*  =====================================================*/
 
 	/* Posts - Lazy Loading
 	---------------------------------------------- */
-	$('.post-image img, iframe').unveil(200, function() {
+	$('.post-image img, iframe, .post-oembed-image img').unveil(200, function() {
 		$(this).load(function() {
 			this.style.opacity = 1;
 
@@ -79,24 +106,14 @@ jQuery(document).ready(function($) {
 				layoutMode: 'masonry',
 			});
 
-			// post-heading event
-			// $posts.each(function() {
-			// 	var $header = $(this).find('.header'),
-			// 		$meta = $(this).find('.meta');
-
-			// 	$header.on('mouseenter', function() {
-			// 		$meta.stop().slideDown();
-			// 	}).on('mouseleave', function() {
-			// 		$meta.stop().slideUp();
-			// 	});
-			// });
+			initPostPopover();
 
 		} else if (layout === 'list') {
 
 			$('.post').removeClass('isotope');
 			$('#posts').isotope('destroy');
-			// $('.posts .header').off('mouseenter');
-			// $('.posts .header').off('mouseleave');
+
+			destroyPostPopover();
 
 		}
 
@@ -113,17 +130,59 @@ jQuery(document).ready(function($) {
 		setLayout($(this).data('layout'));
 	});
 
-	// $('#toggle-layout').on('click', function() {
-	// 	var layout = (window.settings.layout === 'list') ? 'grid' : 'list';
-	// 	setLayout(layout);
-	// 	$(this).find('i').toggleClass('fa-th-list').toggleClass('fa-th');
-	// });
-
 	if ((window.settings.layout === 'grid') && (window.settings.view === 'index')) {
 		setLayout('grid');
 	}
 
-	/* Posts - Share - Twitter
+	/* Posts - toggle post-header popover on Isotope layout
+	---------------------------------------------- */
+	function initPostPopover() {
+		$('.post-heading').popup({
+			className: {
+				popup: 'ui fluid popup',
+			},
+			delay: {
+				show: 20,
+				hide: 2000,
+			},
+			duration: 300,
+			exclusive: false,
+			hideOnScroll: false,
+			hoverable: true,
+			inline   : true,
+			position : 'bottom left',
+			transition: 'fade',
+		});
+	}
+
+	function destroyPostPopover() {
+		$('.post-heading').popup('destroy');
+	}
+
+/* ======================================================
+*  Comments
+*  =====================================================*/
+
+	/* Comments - Toggle Replies
+	---------------------------------------------- */
+	$('.toggle-replies').on('click', function(e) {
+		e.preventDefault();
+		$(this).find('.fa').toggleClass('fa-plus').toggleClass('fa-minus');
+		$(this).parent().siblings('.comments').toggle();
+	});
+
+	/* Comments - load more comments
+	---------------------------------------------- */
+	$('.load-more-comments').on('click', function(e) {
+		e.preventDefault();
+		console.log(this);
+	});
+
+/* ======================================================
+*  Sharing
+*  =====================================================*/
+
+	/* Share - Twitter
 	---------------------------------------------- */
 	$('.share-twitter').on('click', function(e) {
 		e.preventDefault();
@@ -136,7 +195,7 @@ jQuery(document).ready(function($) {
 		window.open('http://twitter.com/share?url=' + url + '&text=' + text + '&', 'twitterwindow', 'height=450, width=550, top='+($(window).height()/2 - 225) +', left='+($(window).width()/2 - 225)+', toolbar=0, location=0, menubar=0, directories=0, scrollbars=0');
 	});
 
-	/* Posts - Share - Google
+	/* Share - Google
 	---------------------------------------------- */
 	$('.share-google').on('click', function(e) {
 		e.preventDefault();
@@ -148,7 +207,6 @@ jQuery(document).ready(function($) {
 
 		window.open('https://plus.google.com/share?url=' + url + '&text=' + text, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=450,width=550,top='+($(window).height()/2 - 225) +', left='+($(window).width()/2 - 225));
 	});
-
 
 	/* Posts - Share - Facebook
 	---------------------------------------------- */
@@ -176,8 +234,6 @@ jQuery(document).ready(function($) {
 
 	// });
 
-
-
 	/* Common - Form validation
 	---------------------------------------------- */
 	// $('#formLogin').form({
@@ -200,8 +256,6 @@ jQuery(document).ready(function($) {
 	// 		]
 	// 	}
 	// });
-
-
 
 	/* FreezeFrame: pause gifs
 	---------------------------------------------- */
@@ -238,33 +292,6 @@ jQuery(document).ready(function($) {
 	// }
 
 	// setLoader(10);
-
-	/* Images loaded
-	---------------------------------------------- */
-	// $('#posts').imagesLoaded(function() {
-
-	// 	$('#toggle-layout').removeClass('disabled');
-	// 	setLoader(100);
-	// 	clearInterval(loaderInt);
-	// 	setTimeout(function() {
-	// 		hideLoader();
-	// 	}, 500);
-	// });
-
-	// $(window).load(function() {
-	// 	setLoader(100);
-	// });
-
-	/* Comments: toggle replies
-	---------------------------------------------- */
-	// $('.toggle-replies').on('click', function(e) {
-	// 	e.preventDefault();
-
-	// 	$(this).find('i').toggleIcon();
-
-	// 	$(this).closest('li').children('.comment-replies').toggleClass('comment-replies-hidden');
-
-	// });
 
 	/* Comments: toggle all comment
 	 * @todo disturbs icons and order of already closed comments

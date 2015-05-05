@@ -2,17 +2,24 @@
 *  Main
 *  =====================================================*/
 
-@pkg: '../packages';
+@pkg: '../bower_components';
 
 // plugins
 @import (less) '@{pkg}/fancybox/source/jquery.fancybox.css';
 @import (less) '@{pkg}/autocompeter/public/dist/autocompeter.css';
+@import (less) '@{pkg}/animate.css/animate.css';
+
+// bootstrap
 @import '@{pkg}/bootstrap/less/variables';
 @import '@{pkg}/bootstrap/less/mixins';
-@import '@{pkg}/bootstrap/less/responsive-embed';
+
+// semantic
+@import (less) '@{pkg}/Semantic-UI/dist/semantic.css';
+
+// font awesome
+@import '@{pkg}/font-awesome/less/font-awesome';
+
+// grid
+@import '@{pkg}/bootstrap/less/grid';
 @import '@{pkg}/bootstrap/less/responsive-utilities';
-// @import (less) '@{pkg}/Semantic-UI/dist/semantic.css';
-// @import '@{pkg}/font-awesome/less/font-awesome';
-// @import '@{pkg}/bootstrap/less/variables';
-// @import '@{pkg}/bootstrap/less/grid';
-// @import (less) '@{pkg}/animate.css/animate.css';
+@import '@{pkg}/bootstrap/less/responsive-embed';

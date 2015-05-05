@@ -21,7 +21,7 @@
 
 .post {
 	margin: 0 auto 20px;
-	max-width: 750px;
+	max-width: @post-max-width;
 	width: 100%;
 
 	.ui.card {
@@ -32,9 +32,21 @@
 	}
 }
 
+/* Page Single
+---------------------------------------------- */
+.view-single {
+	#post-single .post {
+		overflow-y: scroll;
+		padding: 1px;
+	}
+
+	.main {
+		padding-bottom: 0;
+	}
+}
+
 /* Isotope
 ---------------------------------------------- */
-
 .post.isotope {
 	margin-bottom: 15px;
 	margin-left: 0;
@@ -48,21 +60,29 @@
 		.header {
 			padding-right: 0;
 
-			&:hover + .meta {
-				padding-bottom: 50px;
+			.ui.label {
+				display: inline-block;
+				margin-bottom: 0;
 			}
 		}
 
-		.meta {
-			.transition(all 300ms ease-out);
-			overflow: hidden;
-			height: 0;
-		}
-
+		hr,
 		.post-type,
-		.post-domain {
+		.post-domain,
+		.meta {
 			display: none;
 		}
+	}
+
+	.ui.popup {
+		border: 0;
+		border-top-left-radius: 0;
+		border-top-right-radius: 0;
+		font-size: 12px;
+		left: 0 !important;
+		margin-top: 0;
+		padding-left: 20px;
+		width: 100% !important;
 	}
 
 	.post-footer {
@@ -101,6 +121,10 @@
 		.post-oembed-excerpt {
 			padding: 15px;
 			width: 100%;
+
+			.title {
+				color: @gray;
+			}
 		}
 	}
 }
@@ -109,11 +133,16 @@
 ---------------------------------------------- */
 .post-heading {
 	.clearfix;
+	border-bottom: 1px solid @gray-lighter;
 	padding: 6px 15px 0;
 	position: relative;
 
 	.header {
 		padding-right: 20px;
+
+		.ui.label {
+			display: none;
+		}
 	}
 
 	.post-type {
@@ -123,35 +152,80 @@
 	}
 
 	.post-subreddit {
+		font-weight: bold;
 		padding-left: 0;
 		padding-right: 0;
 	}
 
 	.post-score {
-		margin: 0 6px !important;
+		margin-right: 5px !important;
 	}
 
-	.card .meta {
+	.meta {
 		.clearfix;
+		margin-top: 5px;
+
 		a {
+			color: @text-color-light;
 			padding: 0;
-		}
-		* {
-			margin: 0;
+
+			&:hover {
+				color: @link-color-hover;
+			}
 		}
 	}
 }
 
-.ui.card .meta *,
-.ui.cards>.card .meta * {
-	margin-left: 0;
-	margin-right: 0;
+.ui.card .meta {
+	font-size: .85em;
+
+	* {
+		margin: 0;
+	}
 }
 
 /* Post footer
 ---------------------------------------------- */
 .post-footer {
-	padding: 10px 15px;
+	border-top: 1px solid @gray-lighter;
+	padding: 5px;
+
+	.ui.secondary.pointing.menu {
+		border: 0;
+
+		> .right.menu:first-child {
+			display: block;
+		}
+
+		> .item,
+		> .menu > .item {
+			border: 0;
+			color: @gray;
+
+			&:hover {
+				color: @gray-dark;
+			}
+
+			.active {
+				border: 0;
+			}
+		}
+
+		.right.menu {
+			.item.dropdown .menu {
+				border-radius: 0;
+				border-top: 3px solid @gray-lighter;
+				right: -6px;
+				top: 29px;
+
+				> .item {
+					text-align: center;
+				}
+			}
+		}
+
+	}
+
 }
 
 /* Post content

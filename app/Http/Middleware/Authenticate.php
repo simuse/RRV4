@@ -2,7 +2,7 @@
 
 use Config;
 use Closure;
-use \App\User;
+use \App\Auth;
 
 class Authenticate {
 

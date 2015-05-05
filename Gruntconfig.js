@@ -6,7 +6,6 @@ module.exports = {
 
     /**
      * Paths
-     * @type {Object}
      */
     dir: {
 
@@ -22,7 +21,6 @@ module.exports = {
 
     /**
      * Server configuration
-     * @type {Object}
      */
     server: {
 
@@ -36,7 +34,6 @@ module.exports = {
 
     /**
      * Files to watch
-     * @type {Object}
      */
     watch: {
 
@@ -46,26 +43,50 @@ module.exports = {
 
     },
 
-    /**
-     * Files/Folders to be processed in Grunt tasks
-     * @type {Object}
-     */
     files: {
 
-        plugins: {
+        /**
+         * Files to copy from one folder to another
+         */
+        copy: [
+            {
+                src: ['<%= dir.pkg %>/font-awesome/fonts/*'],
+                dest: '<%= dir.dist %>/fonts/',
+                expand: true, flatten: true
+            },
+            {
+                src: ['<%= dir.pkg %>/fancybox/source/*{png,gif}'],
+                dest: '<%= dir.dist %>/css/',
+                expand: true, flatten: true
+            },
+            {
+                src: [
+                    '<%= dir.pkg %>/jquery/dist/jquery.min.js',
+                    '<%= dir.pkg %>/jquery/dist/jquery.min.map'
+                ],
+                dest: '<%= dir.dist %>/js/',
+                expand: true, flatten: true
+            }
+        ],
 
-            fonts: [
+        js: {
 
-                'font-awesome/fonts/*',
+            app: [
+
+                '<%= dir.src %>/js/helpers.js',
+                '<%= dir.src %>/js/extend.js',
+                '<%= dir.src %>/js/modules/*.js',
+                '<%= dir.src %>/js/main.js',
 
             ],
 
-            images: [],
+            plugins: [
 
-            js: [
-
-                // '<%= dir.pkg %>/underscore/underscore.js',
-                // '<%= dir.pkg %>/backbone/backbone.js',
+                '<%= dir.pkg %>/Semantic-UI/dist/semantic.js',
+                '<%= dir.pkg %>/fancybox/source/jquery.fancybox.js',
+                '<%= dir.pkg %>/isotope/dist/isotope.pkgd.js',
+                '<%= dir.pkg %>/unveil/jquery.unveil.js',
+                '<%= dir.pkg %>/autocompeter/public/dist/autocompeter.js',
                 // '<%= dir.pkg %>/console-polyfill/index.js',
                 // '<%= dir.pkg %>/bootstrap/js/tooltip.js',
                 // '<%= dir.pkg %>/bootstrap/js/affix.js',
@@ -79,36 +100,12 @@ module.exports = {
                 // '<%= dir.pkg %>/bootstrap/js/scrollspy.js',
                 // '<%= dir.pkg %>/bootstrap/js/tab.js',
                 // '<%= dir.pkg %>/bootstrap/js/transition.js',
-                '<%= dir.pkg %>/Semantic-UI/dist/semantic.js',
-                '<%= dir.pkg %>/fancybox/source/jquery.fancybox.js',
-                '<%= dir.pkg %>/isotope/dist/isotope.pkgd.js',
-                '<%= dir.pkg %>/unveil/jquery.unveil.js',
-                '<%= dir.pkg %>/autocompeter/public/dist/autocompeter.js',
                 // '<%= dir.pkg %>/imagesloaded/imagesloaded.pkgd.js',
                 // '<%= dir.pkg %>/jquery-mousewheel/jquery.mousewheel.js',
 
             ],
 
-        }, // plugins
-
-        app: {
-
-            js: [
-
-                '<%= dir.src %>/js/helpers.js',
-                '<%= dir.src %>/js/extend.js',
-                '<%= dir.src %>/js/modules/*.js',
-                '<%= dir.src %>/js/main.js',
-
-            ],
-
-            less: [
-
-                '<%= dir.src %>/less/main.less',
-
-            ],
-
-        }, // app
+        },
 
     }
 

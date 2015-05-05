@@ -2,18 +2,20 @@
 *  General
 *  =====================================================*/
 
-.row {
-	.clearfix;
-}
-
 .main {
 	.clearfix;
-	margin-top: 42px;
+	margin-top: 60px;
 	padding: 20px;
-}
 
-.view-index {
-	.main {
+	&.view-index {
 		margin-top: 72px;
 	}
+
+	&:after {
+		z-index: 2000;
+	}
+}
+
+.row {
+	.clearfix;
 }

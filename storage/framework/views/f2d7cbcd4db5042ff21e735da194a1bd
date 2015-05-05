@@ -10,7 +10,11 @@
 
 			<div class="post-content">
 
-				<?php echo $__env->make('posts.post-type', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+				<?php if(Request::has('debug')): ?>
+					<?php echo $__env->make('posts.post-type-debug', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+				<?php else: ?>
+					<?php echo $__env->make('posts.post-type', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+				<?php endif; ?>
 
 			</div>
 

@@ -12,6 +12,7 @@
 	<div class="wrap pusher" role="document">
 
 		<main class="main" role="main">
+
 			@include('common.notifications')
 
 			@yield('content')
@@ -21,6 +22,7 @@
 	</div>
 
 	@include('modals.login')
+	@include('modals.about')
 
 	@include('common.scripts')
 

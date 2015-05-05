@@ -1,0 +1,150 @@
+{
+    "project": {
+        "name": "red-it",
+        "description": "A Reddit client app",
+        "version": "0.0.10",
+        "url": "http://reddit.simonvreux.be"
+    },
+    "files": {
+        "resources/assets/js/extend.js": {
+            "name": "resources/assets/js/extend.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "resources/assets/js/helpers.js": {
+            "name": "resources/assets/js/helpers.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {},
+    "classes": {},
+    "classitems": [
+        {
+            "file": "resources/assets/js/extend.js",
+            "line": 9,
+            "description": "Give the selector and it's argument the same height",
+            "author": "Simon Vreux <simon@cherrypulp.com>",
+            "class": ""
+        },
+        {
+            "file": "resources/assets/js/extend.js",
+            "line": 26,
+            "description": "Make the selector scroll back to top on click",
+            "author": "Simon Vreux <simon@cherrypulp.com>",
+            "params": [
+                {
+                    "name": "offset",
+                    "description": "from when the button should be visible",
+                    "type": "Int"
+                }
+            ],
+            "class": ""
+        },
+        {
+            "file": "resources/assets/js/extend.js",
+            "line": 56,
+            "description": "Toggle the FontAwesome class for an icon",
+            "version": "1.0.0",
+            "author": "Simon Vreux <simon@cherrypulp.com>",
+            "example": [
+                "  $('i').toggleIcon('fa-edit');"
+            ],
+            "params": [
+                {
+                    "name": "newIcon",
+                    "description": "new icon class",
+                    "type": "String"
+                }
+            ],
+            "class": ""
+        },
+        {
+            "file": "resources/assets/js/helpers.js",
+            "line": 5,
+            "description": "Save a cookie in the browser",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "value",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "days",
+                    "description": "",
+                    "type": "Integer"
+                }
+            ],
+            "class": ""
+        },
+        {
+            "file": "resources/assets/js/helpers.js",
+            "line": 23,
+            "description": "Returns the value of a cookie",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "String | boolean"
+            },
+            "class": ""
+        },
+        {
+            "file": "resources/assets/js/helpers.js",
+            "line": 43,
+            "description": "Deletes a cookie",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "class": ""
+        }
+    ],
+    "warnings": [
+        {
+            "message": "unknown tag: version",
+            "line": " resources/assets/js/extend.js:56"
+        },
+        {
+            "message": "Missing item type\nGive the selector and it's argument the same height",
+            "line": " resources/assets/js/extend.js:9"
+        },
+        {
+            "message": "Missing item type\nMake the selector scroll back to top on click",
+            "line": " resources/assets/js/extend.js:26"
+        },
+        {
+            "message": "Missing item type\nToggle the FontAwesome class for an icon",
+            "line": " resources/assets/js/extend.js:56"
+        },
+        {
+            "message": "Missing item type\nSave a cookie in the browser",
+            "line": " resources/assets/js/helpers.js:5"
+        },
+        {
+            "message": "Missing item type\nReturns the value of a cookie",
+            "line": " resources/assets/js/helpers.js:23"
+        },
+        {
+            "message": "Missing item type\nDeletes a cookie",
+            "line": " resources/assets/js/helpers.js:43"
+        }
+    ]
+}

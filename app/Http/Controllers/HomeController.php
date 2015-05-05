@@ -1,20 +1,15 @@
 <?php namespace App\Http\Controllers;
 
 use Config;
+use Lang;
 use Request;
 use Route;
 use Session;
 use App\Reddit;
 use App\User;
-
-/**
- * @todo  detect Post Type for Sounds (soundcloud,...)
- * @todo  rich Schema for post types
- * @todo  JS unveil for oembed images
- */
+use App\Classes\Helpers;
 
 class HomeController extends Controller {
-
 
 	public function __construct()
 	{
@@ -24,6 +19,16 @@ class HomeController extends Controller {
 		// get route parameters
 		$this->params = Route::current()->parameters();
 		$this->previousPage = Session::has('previousPage') ? Session::get('previousPage') : null;
+
+	}
+
+	/**
+	 * Show subreddit/index page
+	 *
+	 * @return View
+	 */
+	public function getIndex()
+	{
 
 		// assign parameters
 		$this->limit 		= null;
@@ -43,16 +48,6 @@ class HomeController extends Controller {
 		view()->share('sort', $this->sort);
 		view()->share('sortSince', $this->time);
 		view()->share('url', $this->url);
-
-	}
-
-	/**
-	 * Show subreddit/index page
-	 *
-	 * @return View
-	 */
-	public function getIndex()
-	{
 
 		// get posts
 		$reddit = new Reddit();
@@ -102,14 +97,26 @@ class HomeController extends Controller {
 	 * @param  string $id
 	 * @return View
 	 */
-	public function getSingle($id = null)
+	public function getSingle($id = null, $sort = null)
 	{
 
 		// get post
 		$reddit = new Reddit();
-		$post = $reddit->getPost($id);
+		$post = $reddit->getPost($id, $sort);
 
-		return view('single')->with('data', $post);
+		// get current url without the filters param
+		view()->share('url', '/p/' . $id);
+
+		view()->share('subreddit', $post['post']['subreddit']);
+
+		// view
+		$data = [
+			'comments'  => $post['comments'],
+			'post' 		=> $post['post'],
+			'sort'		=> $sort,
+		];
+
+		return view('single')->with('data', $data);
 
 	}
 

@@ -6,7 +6,12 @@ use Config;
 use Request;
 use Session;
 use Embed\Embed;
+
 use GuzzleHttp\Client;
+use GuzzleHttp\Event\EmitterInterface;
+use GuzzleHttp\Event\SubscriberInterface;
+use GuzzleHttp\Event\BeforeEvent;
+
 use Illuminate\Database\Eloquent\Model;
 use App\Classes\Helpers;
 
@@ -16,8 +21,16 @@ class Reddit extends Model {
 	public function __construct()
 	{
 
+		// http client / Guzzle
 		$this->client = new Client();
+		// $this->emitter = $this->client->getEmitter();
+		// $this->emitter->on('before', function (BeforeEvent $event) {
+		//    dd($event);
+		// });
+
+		// embed
 		$this->embed = new Embed();
+
 		$this->page = Request::get('p');
 		$this->previousPage = Session::get('previousPage');
 
@@ -29,12 +42,22 @@ class Reddit extends Model {
 	 * @param 	string $id
 	 * @return 	array
 	 */
-	public function getPost($id)
+	public function getPost($id, $sort)
 	{
 
+		$sort = isset($sort) ? $sort : 'top';
+
 		// making the request
-		$query = sprintf(Config::get('reddit.api.host') . '/comments/%s.json', $id);
-	    $response = $this->client->get($query);
+		try {
+
+			$query = sprintf(Config::get('reddit.api.host') . '/comments/%s.json?sort=%s', $id, $sort);
+			$request = $this->client->createRequest('GET', $query);
+			$response = $this->client->send($request);
+
+		} catch (Exception $e) {
+			d('Caught exception');
+			dd($e);
+		}
 
 	    // check the response
 	    if ($response->getReasonPhrase() !== 'OK') {
@@ -166,7 +189,6 @@ class Reddit extends Model {
 		}
 
 		// youtube
-		// @TODO better youtube regex (see $matches[1])
 		if (preg_match('/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/i', $url, $matches)) {
 			$post['originalUrl'] = $url;
 			$post['url'] = '//youtube.com/embed/' . $matches[2];
@@ -185,10 +207,9 @@ class Reddit extends Model {
 			return 'wikipedia';
 		}
 
-		// instagram
-		// @TODO edit html
-		if (preg_match('/instagram.com/', $domain)) {
-			return 'instagram';
+		// soundcloud
+		if (preg_match('/soundcloud.com/', $domain)) {
+			return 'soundcloud';
 		}
 
 		// oembed

@@ -9,22 +9,18 @@ $comments 	= $data['comments'];
 
 <?php $__env->startSection('content'); ?>
 
-	<div id="posts">
-
+	<?php /* post */ ?>
+	<div id="post-single">
 		<?php echo $__env->make('posts.post', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
-
 	</div>
 
-	<div id="reply">
-
-		<?php echo $__env->make('posts.post-reply', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
-
+	<?php /* comments */ ?>
+	<div id="comment-actions">
+		<?php echo $__env->make('posts.comment-actions', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 	</div>
 
-	<div id="comments">
-
+	<div class="top" id="comments">
 		<?php echo $__env->make('posts.post-comments', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
-
 	</div>
 
 <?php $__env->stopSection(); ?>

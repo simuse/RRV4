@@ -5,62 +5,113 @@
 
 ?>
 
-<div class="comment">
+<div class="comment <?php if($hasReplies): ?> has-replies <?php endif; ?>">
 
 	<div class="content">
 
-		<a class="author" href="#"><?php echo e(isset($comment['author']) ? $comment['author'] : '[deleted]'); ?></a>
+		<?php if(isset($comment['author'])): ?>
 
-		<?php /* meta */ ?>
-		<div class="metadata">
-
-			<span class="label" title="Comment Karma"><?php echo e(isset($comment['score']) ? $comment['score'] : '0'); ?></span>
-
-			<?php /* flair */ ?>
-			<?php if(isset($comment['author_flair_text']) && !is_null($comment['author_flair_text'])): ?>
-				- <span class="flair"> <?php echo e($comment['author_flair_text']); ?></span>
+			<?php /* toggle */ ?>
+			<?php if($hasReplies): ?>
+				<button class="toggle-replies ui micro button" title="Collapse comments">
+					<i class="fa fa-minus"></i>
+				</button>
 			<?php endif; ?>
 
-			<?php /* gold */ ?>
-			<?php if(isset($comment['gilded']) && $comment['gilded'] === 1): ?>
-				- <span class="fa-stack gilded" title="The user has received Gold for this comment">
-					<i class="fa fa-circle fa-stack-2x"></i>
-					<i class="fa fa-star fa-stack-1x"></i>
+			<?php /* author */ ?>
+			<a class="author <?php if($comment['author'] === $post['author']): ?> op <?php endif; ?>"
+				title="<?php if($comment['author'] === $post['author']): ?> The OP <?php else: ?> Comment author <?php endif; ?>"
+				href="/u/<?php echo e($comment['author']); ?>">
+				<?php echo e($comment['author']); ?>
+
+			</a>
+
+			<?php /* meta */ ?>
+			<div class="metadata">
+
+				<?php /* karma */ ?>
+				<span title="Comment Karma"><?php echo e(isset($comment['score']) ? $comment['score'] : '0'); ?> points</span>
+
+				<?php /* time */ ?>
+				<span title="Time of submission">
+					<time datetime="" itemprop="datePublished uploadDate">
+						<?php echo e(isset($comment['created']) ? $comment['created'] : '0'); ?>
+
+					</time>
 				</span>
-			<?php endif; ?>
 
-		</div>
+				<?php /* flair */ ?>
+				<?php if(isset($comment['author_flair_text']) && !is_null($comment['author_flair_text'])): ?>
+					<span class="flair" title="Subreddit flair"> <?php echo e($comment['author_flair_text']); ?></span>
+				<?php endif; ?>
 
-		<?php /* content */ ?>
-		<p class="text">
-			<?php echo e(isset($comment['body']) ? $comment['body'] : '[deleted]'); ?>
-
-		</p>
-
-		<?php /* actions */ ?>
-		<div class="actions">
-			<a class="upvote" href="#"><i class="fa fa-arrow-up"></i></a>
-			<a class="downvote" href="#"><i class="fa fa-arrow-down"></i></a>
-			<a class="reply" href="#">Reply</a>
-			<a class="save" href="#">Save</a>
-		</div>
-
-		<?php /* replies */ ?>
-		<?php if($hasReplies): ?>
-        	<div class="comments">
-
-				<?php $replies = $comment['replies']['data']['children'] ?>
-
-				<?php foreach($replies as $key => $comment): ?>
-
-					<?php echo $__env->make('posts.post-comment', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
-
-				<?php endforeach; ?>
+				<?php /* gold */ ?>
+				<?php if(isset($comment['gilded']) && $comment['gilded'] === 1): ?>
+					<span class="fa-stack gilded" title="The user has received Gold for this comment">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa fa-star fa-stack-1x"></i>
+					</span>
+				<?php endif; ?>
 
 			</div>
-		<?php endif; ?>
 
-	</div>
+			<?php /* content */ ?>
+			<p class="text">
+				<?php echo e($comment['body']); ?>
+
+			</p>
+
+			<?php /* actions */ ?>
+			<div class="actions">
+
+				<?php /* votes */ ?>
+				<div class="ui icon buttons">
+					<button class="upvote ui micro button" title="Updvote">
+						<i class="fa fa-arrow-up"></i>
+					</button>
+					<button class="downvote ui micro button" title="Downvote">
+						<i class="fa fa-arrow-down"></i>
+					</button>
+				</div>
+
+				<?php /* reply */ ?>
+				<a class="reply" href="#">Reply</a>
+
+				<?php /* save */ ?>
+				<a class="save" href="#">Save</a>
+
+			</div>
+
+
+		</div>
+
+	<?php else: ?>
+
+		<?php /* load more */ ?>
+		<a href="#" class="load-more-comments"
+			data-parent="<?php echo e($comment['parent_id']); ?>"
+			data-children="<?php foreach($comment['children'] as $value): ?><?php echo e($value . ','); ?><?php endforeach; ?>">
+			Load more comments
+		</a>
+
+	<?php endif; ?>
+
+	<?php /* replies */ ?>
+	<?php if($hasReplies): ?>
+
+    	<div class="comments">
+
+			<?php $replies = $comment['replies']['data']['children'] ?>
+
+			<?php foreach($replies as $key => $comment): ?>
+
+				<?php echo $__env->make('posts.post-comment', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+
+			<?php endforeach; ?>
+
+		</div>
+
+	<?php endif; ?>
 
 </div>
 

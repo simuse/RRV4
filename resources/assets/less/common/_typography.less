@@ -2,6 +2,14 @@
  * Typography
  * =====================================================*/
 
+.text-color {
+	color: @text-color;
+}
+
+.text-light {
+	color: @text-color-light;
+}
+
 // General
 body {
 	-webkit-font-smoothing: antialiased;
@@ -38,11 +46,14 @@ p {
 }
 
 a {
+	color: @link-color;
   	cursor: pointer;
   	outline: none;
   	text-decoration: none;
 
-  	&:hover, &:focus {
+  	&:hover,
+  	&:focus {
+  		color: @link-color-hover;
     	outline: none;
   	}
 }

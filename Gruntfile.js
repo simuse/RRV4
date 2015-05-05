@@ -22,21 +22,18 @@
  *
  * Bundled tasks:
  * --------------
- * - css           less:dev, autoprefixer, csslint
+ * - css           less:dev, cssmin
  * - js            jshint, concat
- * - images        imagemin
- * - dev           [default task] copy, images, concurrent:assets, notify:dev
- * - lint          concurrent:lint
+ * - img           imagemin
  * - report        plato, open:reports
  * - doc           yuidoc, open:doc
  * - serve         php:server, browserSync, watch
- * - prod          clean, copy, images, less:prod, autoprefixer, cssmin, csslint, jshint, uglify, doc, report, bump, notify:prod
+ * - prod/build    clean, copy, images, less:prod, autoprefixer, cssmin, csslint, jshint, uglify, doc, report, bump, notify:prod
  *
  * @TODO improve plato task
  * @TODO improve watch / browsersync synergy
- * @TODO fix csslint
- * @TODO fix concat paths with cwd
  * @TODO fix serve task
+ * @TODO fix bump task
  */
 
 module.exports = function (grunt) {
@@ -65,7 +62,10 @@ module.exports = function (grunt) {
         clean: {
 
             dist: {
-                src: ['<%= dir.dist %>/*'],
+                src: [
+                    '<%= dir.dist %>/css/*{.css}',
+                    '<%= dir.dist %>/js/*{.js}'
+                ],
                 options: {
                     force: true
                 },
@@ -75,17 +75,16 @@ module.exports = function (grunt) {
 
         copy: {
 
-            fonts: {
-                files: [{
-                    src: [
-                        '<%= files.plugins.fonts %>',
-                    ],
-                    dest: '<%= dir.dist %>/fonts/',
-                    cwd: '<%= dir.pkg %>/',
-                    expand: true,
-                    flatten: true
-                }]
-            },
+            main: {
+                files: '<%= files.copy %>',
+
+                // @todo make options work
+                // options: {
+                //     expand: true,
+                //     flatten: true
+                // }
+
+            }
 
         }, // copy
 
@@ -104,16 +103,6 @@ module.exports = function (grunt) {
                 }]
             },
 
-            plugins: {
-                files: [{
-                    expand: true,
-                    flatten: true,
-                    cwd: '<%= dir.pkg %>/',
-                    src: ['<%= files.plugins.images %>'],
-                    dest: '<%= dir.dist %>/img',
-                }]
-            },
-
         }, // imagemin
 
         less: {
@@ -128,20 +117,20 @@ module.exports = function (grunt) {
                     strictMath: true,
                 },
                 files: {
-                    '<%= dir.dist %>/css/main.css': ['<%= files.app.less %>'],
+                    '<%= dir.dist %>/css/main.css': ['<%= dir.src %>/less/main.less'],
                 }
             },
 
             prod: {
                 options: {
                     banner: '<%= meta.banner %>',
-                    compress: false,
+                    compress: true,
                     relativeUrls: false,
                     strictImports: true,
                     strictMath: true,
                 },
                 files: {
-                    '<%= dir.dist %>/css/main.css': ['<%= files.app.less %>'],
+                    '<%= dir.dist %>/css/main.min.css': ['<%= dir.src %>/less/main.less'],
                 }
             }
 
@@ -150,11 +139,10 @@ module.exports = function (grunt) {
         csslint: {
 
             options: {
-                csslintrc: 'less/.csslintrc'
+                csslintrc: '<%= dir.src %>/.csslintrc'
             },
 
             files: [
-                '<%= dir.dist %>/css/main.css',
                 '<%= dir.dist %>/css/main.min.css',
             ],
 
@@ -177,24 +165,6 @@ module.exports = function (grunt) {
 
         }, // cssmin
 
-        autoprefixer: {
-
-            options: {
-                browsers: ['last 2 versions', 'ie 8', 'ie 9'],
-                diff: true,
-                map: true,
-                silent: true,
-            },
-
-            files: {
-                expand: true,
-                flatten: true,
-                src: '<%= dir.dist %>/css/*.css',
-                dest: '<%= dir.dist %>/css/',
-            },
-
-        }, // autoprefixer
-
         concat: {
             options: {
                 separator: ';',
@@ -202,12 +172,12 @@ module.exports = function (grunt) {
             },
 
             plugins: {
-                src: ['<%= files.plugins.js %>'],
+                src: ['<%= files.js.plugins %>'],
                 dest: '<%= dir.dist %>/js/plugins.js',
             },
 
             main: {
-                src: ['<%= files.app.js %>'],
+                src: ['<%= files.js.app %>'],
                 dest: '<%= dir.dist %>/js/main.js',
             },
 
@@ -216,7 +186,7 @@ module.exports = function (grunt) {
         jshint: {
 
             main: {
-                src: ['<%= files.app.js %>'],
+                src: ['<%= files.js.app %>'],
                 options: {
                     jshintrc: true
                 }
@@ -232,12 +202,12 @@ module.exports = function (grunt) {
             },
 
             plugins: {
-                src: ['<%= files.plugins.js %>'],
+                src: ['<%= files.js.plugins %>'],
                 dest: '<%= dir.dist %>/js/plugins.min.js',
             },
 
             main: {
-                src: ['<%= files.app.js %>'],
+                src: ['<%= files.js.app %>'],
                 dest: '<%= dir.dist %>/js/main.min.js',
             },
 
@@ -251,7 +221,7 @@ module.exports = function (grunt) {
                     hostname: '<%= server.hostname %>',
                     port: '<%= server.port %>',
                     keepalive: true,
-                    open: true,
+                    // open: false,
                 }
             }
 
@@ -269,7 +239,7 @@ module.exports = function (grunt) {
                 },
                 options: {
                     proxy: '<%= server.hostname %>:<%= server.port %>',
-                    watchTask: '<%= server.watch %>',
+                    watchTask: true,
                     notify: true,
                     open: true,
                     logLevel: 'silent',
@@ -302,9 +272,6 @@ module.exports = function (grunt) {
             assets: {
                 tasks: ['js', 'css'],
             },
-            lint: {
-                tasks: ['jshint', 'csslint'],
-            }
 
         }, // concurrent
 
@@ -320,6 +287,13 @@ module.exports = function (grunt) {
             css: {
                 options: {
                     title: 'CSS task complete',
+                    message: '...',
+                }
+            },
+
+            img: {
+                options: {
+                    title: 'IMG task complete',
                     message: '...',
                 }
             },
@@ -348,10 +322,6 @@ module.exports = function (grunt) {
         }, // notify
 
         shell: {
-
-            bower: {
-                command: 'bower install'
-            },
 
             clear: {
                 command: 'clear'
@@ -412,7 +382,6 @@ module.exports = function (grunt) {
         }, // bump
 
     };
-
     require('load-grunt-tasks')(grunt);
     require('time-grunt')(grunt);
     grunt.initConfig(grunt.util._.extend(taskConfig, userConfig));
@@ -421,45 +390,40 @@ module.exports = function (grunt) {
     *  Tasks registration
     *  =====================================================*/
 
-    grunt.registerTask('css', [ 'less:dev',/* 'autoprefixer'*/, 'notify:css' /*'csslint'*/ ]);
+    grunt.registerTask('css', [ 'less:dev', 'cssmin', 'notify:css' ]);
 
-    grunt.registerTask('js', [ 'jshint', 'concat', 'notify:js' ]);
+    grunt.registerTask('js', [ 'jshint', 'concat', 'uglify', 'notify:js' ]);
 
-    grunt.registerTask('images', [ 'imagemin' ]);
-
-    grunt.registerTask('lint', [ 'concurrent:lint' ]);
+    grunt.registerTask('img', [ 'imagemin', 'notify:img' ]);
 
     grunt.registerTask('report', [ 'plato', 'open:reports' ]);
 
     grunt.registerTask('doc', [ 'yuidoc', 'open:doc' ]);
 
-    grunt.registerTask('serve', [ 'php:server', 'browserSync', 'watch' ]);
+    grunt.registerTask('serve', [ 'php:server', 'browserSync', /*'watch'*/ ]);
 
-    grunt.registerTask('default', [ 'dev' ]);
-
-    grunt.registerTask('dev', [
+    grunt.registerTask('default', [
         'copy',
-        'images',
+        'img',
         'concurrent:assets',
         'notify:dev',
     ]);
 
     grunt.registerTask('prod', [
-        'shell:bower',
         'clean:dist',
         'copy',
-        'images',
-        'less:prod',
-        'autoprefixer',
+        'img',
+        'less:dev',
         'cssmin',
-        // 'csslint',
         'jshint',
         'uglify',
         'doc',
         'report',
-        'bump',
+        // 'bump',
         'notify:prod',
     ]);
+
+    grunt.registerTask('build', ['prod']);
 
 };
 

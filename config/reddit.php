@@ -75,11 +75,14 @@ return [
 		'subreddit'	=> 'all',
 
 		'suggested'	=> [
-			'boobs',
-			'funny',
 			'askreddit',
-			'videos',
+			'catgifs',
+			'earthporn',
+			'funny',
+			'iama',
 			'showerthoughts',
+			'videos',
+			'worldnews',
 		],
 
 		'sortBy' => [
@@ -91,12 +94,21 @@ return [
 		],
 
 		'sortSince' => [
+			'all',
 			'hour',
 			'day',
 			'week',
 			'month',
 			'year',
-			'all'
+		],
+
+		'sortComments' => [
+			'top',
+			'best',
+			'new',
+			'hot',
+			'controversial',
+			'old',
 		],
 
 	],

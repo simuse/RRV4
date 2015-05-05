@@ -13,35 +13,45 @@ if ($post['type'] === 'video') {
 	$icon = 'reddit';
 } else if ($post['type'] === 'text') {
 	$icon = 'text';
+} else if ($post['type'] === 'oembed') {
+	$icon = 'newspaper-o';
 }
 
 ?>
 
-<div class="post-heading">
+<div class="post-heading" data-variation="basic"
+		data-html="<p><a class='post-subreddit' href='/r/<?php echo e($post['subreddit']); ?>'><?php echo e($post['subreddit']); ?></a> - <?php echo e($post['timeago']); ?> ago by <a href='/u/<?php echo e($post['author']); ?>'><?php echo e($post['author']); ?></a></p>">
 
+	<?php /* header */ ?>
 	<div class="header">
-		<a class="post-title" href="/p/<?php echo e($post['id']); ?>" itemprop="name url headline discussionUrl">
-			<?php echo e($post['title']); ?>
 
-		</a>
+		<p class="ui tiny label"><?php echo e($post['score']); ?></p>
+		<?php if($viewName === 'single'): ?>
+			<p class="post-title" itemprop="name headline"><?php echo e($post['title']); ?></a>
+		<?php else: ?>
+			<a class="post-title" href="/p/<?php echo e($post['id']); ?>" itemprop="name url headline discussionUrl"><?php echo e($post['title']); ?></a>
+		<?php endif; ?>
 		<i class="post-type fa fa-<?php echo e($icon); ?> pull-right" title="post-type"></i>
+
 	</div>
 
+	<?php /* meta */ ?>
 	<div class="meta">
 
-		<hr>
-
 		<p class="pull-left">
+			<span class="post-score ui tiny label" itemprop="aggregateRating"><?php echo e($post['score']); ?></span>
 			<a class="post-subreddit" href="/r/<?php echo e($post['subreddit']); ?>" itemprop="about">
-				<strong><?php echo e($post['subreddit']); ?></strong>
+				<?php echo e($post['subreddit']); ?>
+
 			</a>
-			<span class="post-score ui tiny red label" itemprop="aggregateRating"><?php echo e($post['score']); ?></span>
-			<span class="post-time">submitted
+			•
+			<span class="post-time">
 				<time datetime="<?php echo e(date('Y-m-d', time($post['created']))); ?>" itemprop="datePublished uploadDate">
 					<?php echo e($post['timeago']); ?>
 
-				</time> ago by
+				</time> ago
 			</span>
+			•
 			<a class="post-author" href="/u/<?php echo e($post['author']); ?>" itemprop="author"><?php echo e($post['author']); ?></a>
 		</p>
 

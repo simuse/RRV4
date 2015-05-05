@@ -5,6 +5,7 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Config;
 use Session;
+use App\Auth;
 use App\User;
 
 abstract class Controller extends BaseController {
@@ -16,18 +17,23 @@ abstract class Controller extends BaseController {
 
 		// User
 		$this->user = new User();
-		$user = $this->user->check();
+
+		$user = null;
+
+		if ($this->user->getToken()) {
+			$user = $this->user->getUser();
+		} elseif ($this->user->getRefreshToken()) {
+			$auth = new Auth();
+			$this->user->setToken($auth->refreshToken());
+			$user = $this->user->getUser();
+		}
+
 		$subscriptions = $this->user->getSubscriptions();
 		$myMultis = $this->user->getMultis();
 
 		view()->share('user', $user);
 		view()->share('subscriptions', $subscriptions);
 		view()->share('myMultis', $myMultis);
-
-		// Refresh Token
-		if ($user) {
-			$this->user->refreshToken();
-		}
 
 	}
 

@@ -10,7 +10,11 @@
 
 			<div class="post-content">
 
-				@include('posts.post-type')
+				@if (Request::has('debug'))
+					@include('posts.post-type-debug')
+				@else
+					@include('posts.post-type')
+				@endif
 
 			</div>
 

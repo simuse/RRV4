@@ -9,22 +9,18 @@ $comments 	= $data['comments'];
 
 @section('content')
 
-	<div id="posts">
-
+	{{-- post --}}
+	<div id="post-single">
 		@include('posts.post')
-
 	</div>
 
-	<div id="reply">
-
-		@include('posts.post-reply')
-
+	{{-- comments --}}
+	<div id="comment-actions">
+		@include('posts.comment-actions')
 	</div>
 
-	<div id="comments">
-
+	<div class="top" id="comments">
 		@include('posts.post-comments')
-
 	</div>
 
 @endsection

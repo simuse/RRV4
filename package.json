@@ -1,7 +1,7 @@
 {
   "name": "red-it",
   "description": "A Reddit client app",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "author": "Simon Vreux <simon.vreux@gmail.com>",
   "keywords": [
     "Reddit",

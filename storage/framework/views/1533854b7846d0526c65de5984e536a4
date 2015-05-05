@@ -11,10 +11,10 @@
 </title>
 
 <?php /* css */ ?>
-<link href="<?php echo e(url('/assets/css/semantic.min.css')); ?>" rel="stylesheet">
+<?php /* <link href="<?php echo e(url('/assets/css/semantic.min.css')); ?>" rel="stylesheet">
 <link href="<?php echo e(url('/assets/css/fa.css')); ?>" rel="stylesheet">
-<link href="<?php echo e(url('/assets/css/grid.css')); ?>" rel="stylesheet">
-<link href="<?php echo e(url('/assets/css/main.css')); ?>" rel="stylesheet">
+<link href="<?php echo e(url('/assets/css/grid.css')); ?>" rel="stylesheet"> */ ?>
+<link href="<?php echo e(getenv('APP_ENV') === 'local' ? url('/assets/css/main.css') : url('/assets/css/main.min.css')); ?>" rel="stylesheet">
 
 <?php /* fonts */ ?>
 <link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>

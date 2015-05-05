@@ -11,7 +11,7 @@
 		</button>
 
 		{{-- header --}}
-		<a class="header item" href="{{ url('/') }}" title="Go to Front Page">
+		<a class="header item" href="{{ url('/') }}" title="The Front Page">
 			Red.It
 	  	</a>
 
@@ -26,10 +26,10 @@
 				<div class="ui transparent input">
 					{!! Form::text('subreddit', null, array(
 						'id' 		  => 'input-subreddit',
-						'placeholder' => 'Go to Subreddit...'
+						'placeholder' => 'Enter Subreddit'
 					))!!}
 				</div>
-				<button class="item ui icon button" type="submit" title="Go to Subreddit">
+				<button class="item ui icon button" type="submit" title="Submit">
 					<i class="fa fa-search"></i>
 				</button>
 				{!! Form::close()!!}
@@ -47,7 +47,7 @@
 					</div>
 				</div>
 			@else
-				<button class="item ui vertical animated secondary button" id="modal-login" title="Login with Reddit">
+				<button class="item ui vertical animated secondary button" id="toggle-modal-login" title="Login with Reddit">
 					<div class="hidden content">Login</div>
 					<div class="visible content">
 						<i class="fa fa-user"></i>

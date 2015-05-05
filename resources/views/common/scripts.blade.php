@@ -13,5 +13,5 @@ window.settings = {
 
 {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> --}}
 <script src="{{ url('/assets/js/jquery.min.js') }}"></script>
-<script src="{{ url('/assets/js/plugins.js') }}"></script>
-<script src="{{ url('/assets/js/main.js') }}"></script>
+<script src="{{ getenv('APP_ENV') === 'local' ? url('/assets/js/plugins.js') : url('/assets/js/plugins.min.js') }}"></script>
+<script src="{{ getenv('APP_ENV') === 'local' ? url('/assets/js/main.js') : url('/assets/js/main.min.js') }}"></script>

@@ -1,4 +1,4 @@
-<div class="ui left vertical inverted sidebar menu" id="sidebar">
+<div class="ui left vertical inverted small sidebar menu" id="sidebar">
 
 	<?php /* subscriptions */ ?>
 	<?php if(!empty($mySubscriptions)): ?>
@@ -29,17 +29,19 @@
 	<?php endif; ?>
 
 	<?php /* suggested */ ?>
-	<div class="item">
-		Suggested
-		<div class="menu">
-			<?php foreach(Config::get('reddit.defaults.suggested') as $key => $value): ?>
-				<a class="item" href="/r/<?php echo e($value); ?>"><?php echo e($value); ?></a>
-			<?php endforeach; ?>
+	<?php if(empty($user)): ?>
+		<div class="item">
+			Suggested
+			<div class="menu">
+				<?php foreach(Config::get('reddit.defaults.suggested') as $key => $value): ?>
+					<a class="item" href="/r/<?php echo e($value); ?>"><?php echo e($value); ?></a>
+				<?php endforeach; ?>
+			</div>
 		</div>
-	</div>
+	<?php endif; ?>
 
-	<a class="item" href="#">
+	<button class="item" id="toggle-modal-about">
 		About
-	</a>
+	</button>
 
 </div>

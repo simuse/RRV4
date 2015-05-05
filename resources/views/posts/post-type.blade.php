@@ -6,7 +6,6 @@
 
 		<img src="" data-src="{{ $post['url'] }}"
 			alt="{{ $post['title'] }}" itemprop="image">
-
 	</a>
 
 {{-- album --}}
@@ -47,6 +46,11 @@
 	<iframe class="post-album" width="100%" height="400" frameborder="0" src="{{ $post['url'] }}">
 	</iframe>
 
+{{-- soundcloud --}}
+@elseif ($type === 'soundcloud')
+
+	<iframe width="100%" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/196110867&amp;color=ff5500&amp;auto_play=false&amp;show_comments=true&amp;show_reposts=false"></iframe>
+
 {{-- oembed --}}
 @elseif ($type === 'oembed')
 
@@ -56,17 +60,17 @@
 		<div class="row">
 
 			@if ($post['oembed']->image)
-				<div class="col-md-2 col-sm-3 col-xs-4 post-oembed-image">
-					<img src="{{ $post['oembed']->image }}" alt="{{ $post['oembed']->title }}">
+				<div class="col-md-4 col-sm-5 col-xs-4 post-oembed-image">
+					<img class="ui medium rounded image" src="{{ $post['oembed']->image }}" alt="{{ $post['oembed']->title }}">
 				</div>
-				<div class="col-md-10 col-sm-9 col-xs-8 post-oembed-excerpt">
+				<div class="col-md-8 col-sm-7 col-xs-8 post-oembed-excerpt">
 			@else
 				<div class="col-xs-12 post-oembed-excerpt">
 			@endif
 
-				<p><strong itemprop="headline">{{ $post['oembed']->title }}</strong></p>
-				<p itemprop="description">{{ $post['oembed']->description }}</p>
-				<p><small>{{ $post['oembed']->providerName }}</small></p>
+				<p class="title"><strong itemprop="headline">{{ $post['oembed']->title }}</strong></p>
+				<p class="description" itemprop="description">{{ $post['oembed']->description }}</p>
+				<p class="provider"><small>{{ $post['oembed']->providerName }}</small></p>
 			</div>
 
 		</div>

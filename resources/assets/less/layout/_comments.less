@@ -2,85 +2,118 @@
 *  Comments
 *  =====================================================*/
 
+#comments,
+#comment-actions {
+	max-width: @post-max-width;
+	margin: 0 auto;
+}
 
+/* Comment actions
+---------------------------------------------- */
+#comment-actions {
+	padding-bottom: 20px;
+}
 
-
-
+/* Comment form
+---------------------------------------------- */
 
 /* Comments
 ---------------------------------------------- */
+.ui.threaded.comments {
+	max-width: none;
 
-// .panel-comments {
-// 	border-color: @gray-light;
+	.comment {
 
-// 	.panel-heading {
-// 		border-bottom: 1px solid @gray-light;
-// 		background-color: @gray-lighter;
-// 	}
+		.ui.micro.button {
+			background-color: transparent;
+			color: @text-color-light;
 
-// 	.panel-body {
-// 		padding: 15px;
-// 	}
-// }
+			&:hover {
+				background-color: transparent;
+				color: @primary-color;
+			}
+		}
 
-// .comments {
-// 	.list-unstyled;
+		.author {
+			color: @text-color-light;
+			font-size: 13px;
+			font-weight: normal;
 
-// 	> li {
-// 		// background: url(../img/list-item-root.png) repeat-y left 50px;
-// 		// border-left: 1px solid @gray;
-// 		border-bottom: 1px solid @gray-light;
-// 		margin-bottom: 10px;
-// 		padding-bottom: 10px;
+			&.op {
+				background-color: @primary-color;
+				border-radius: 2px;
+				color: #fff;
+				padding: 2px 5px;
+			}
+		}
 
-// 		&:last-child {
-// 			border-bottom: none;
-// 			margin: 0;
-// 			padding-bottom: 0;
-// 		}
-// 	}
-// }
+		.metadata {
+			color: @text-color-light;
+			font-size: 12px;
+		}
 
-// .comment {
-// 	.toggle-replies {
-// 		color: darken(@gray-lighter, 20%);
-// 		margin-right: 0;
+		.gilded {
+			.fa-circle {
+				color: GolderRod;
+			}
 
-// 		&:hover {
-// 			color: @brand-primary;
-// 		}
-// 	}
-// }
+			.fa-star {
+				color: Gold;
+			}
+		}
 
-// .comment-replies {
-// 	.transition(height 300ms ease-out);
-// 	list-style: none;
-// 	height: auto;
-// 	overflow-y: hidden;
-// 	padding-left: 20px;
-// }
+		.flair {
+			border: 1px solid @gray-light;
+			color: @gray;
+			padding: 3px 8px;
+		}
 
-// .comment-replies-hidden {
-// 	height: 0;
-// }
+		.content {
+			&:hover {
+				.actions {
+					opacity: 1;
+				}
+			}
+		}
 
-// .gilded {
-// 	color: #E3D392;
-// 	margin-top: 3px;
+		.comments {
+			border-left: 1px solid rgba(255, 255, 255, .1);
+			box-shadow: none;
+			margin: .3em 0 0 1em;
+			padding: 0;
 
-// 	.fa-circle {
-// 		font-size: 22px;
-// 	}
+			.comment {
+				padding-left: 12px;
+			}
+		}
 
-// 	.fa-star {
-// 		color: #fff;
-// 		font-size: 14px;
-// 	}
-// }
+		.actions {
+			.transition(opacity 200ms ease-out);
+			opacity: 0;
 
-// .flair {
-// 	background-color: @gray-lighter;
-// 	border: 1px solid darken(@gray-lighter, 10%);
-// 	font-size: 11px;
-// 	padding: 3px;
-// }
+			a:hover {
+				color: @primary-color;
+			}
+		}
+
+		&.has-replies {
+			> .content > .text,
+			> .content > .actions {
+				padding-left: 20px;
+			}
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

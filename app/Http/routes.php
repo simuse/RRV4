@@ -11,10 +11,9 @@
 |
 */
 
-
 // login
 Route::get('auth',	 						'LoginController@getToken');
-Route::post('auth', 						'LoginController@authorize');
+Route::get('login', 						'LoginController@authorize');
 Route::get('logout',	 					'LoginController@logout');
 
 // users
@@ -22,6 +21,7 @@ Route::get('/u/{user}', 					'ProfileController@getProfile');
 
 // single post
 Route::get('/p/{id}',						'HomeController@getSingle');
+Route::get('/p/{id}/{sort}',				'HomeController@getSingle');
 
 // subreddit
 Route::get('/r/{subreddit}', 				'HomeController@getIndex');

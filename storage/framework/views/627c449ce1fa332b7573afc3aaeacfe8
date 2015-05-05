@@ -12,6 +12,7 @@
 	<div class="wrap pusher" role="document">
 
 		<main class="main" role="main">
+
 			<?php echo $__env->make('common.notifications', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 
 			<?php echo $__env->yieldContent('content'); ?>
@@ -21,6 +22,7 @@
 	</div>
 
 	<?php echo $__env->make('modals.login', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+	<?php echo $__env->make('modals.about', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 
 	<?php echo $__env->make('common.scripts', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 

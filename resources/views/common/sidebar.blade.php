@@ -1,4 +1,4 @@
-<div class="ui left vertical inverted sidebar menu" id="sidebar">
+<div class="ui left vertical inverted small sidebar menu" id="sidebar">
 
 	{{-- subscriptions --}}
 	@if (!empty($mySubscriptions))
@@ -29,17 +29,19 @@
 	@endif
 
 	{{-- suggested --}}
-	<div class="item">
-		Suggested
-		<div class="menu">
-			@foreach(Config::get('reddit.defaults.suggested') as $key => $value)
-				<a class="item" href="/r/{{ $value }}">{{ $value }}</a>
-			@endforeach
+	@if (empty($user))
+		<div class="item">
+			Suggested
+			<div class="menu">
+				@foreach(Config::get('reddit.defaults.suggested') as $key => $value)
+					<a class="item" href="/r/{{ $value }}">{{ $value }}</a>
+				@endforeach
+			</div>
 		</div>
-	</div>
+	@endif
 
-	<a class="item" href="#">
+	<button class="item" id="toggle-modal-about">
 		About
-	</a>
+	</button>
 
 </div>

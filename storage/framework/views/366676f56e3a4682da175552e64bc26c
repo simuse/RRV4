@@ -1,20 +1,27 @@
-<?php
-
-$posts = $data['posts'];
-
-?>
-
-
-
 <?php $__env->startSection('content'); ?>
 
 	<div class="row" id="posts">
 
-		<?php foreach ($data['posts'] as $key => $post): ?>
+		<?php /* posts */ ?>
+		<?php if(!empty($data['posts'])): ?>
 
-			<?php echo $__env->make('posts.post', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+			<?php foreach ($data['posts'] as $key => $post): ?>
 
-		<?php endforeach ?>
+				<?php echo $__env->make('posts.post', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+
+			<?php endforeach ?>
+
+		<?php /* no posts found */ ?>
+		<?php else: ?>
+
+			<div class="container">
+				<div class="ui segment red">
+					<p><?php echo e(Lang::get('errors.posts_not_found')); ?></p>
+					<a href="<?php echo e(url('/')); ?>">Go home</a>
+				</div>
+			</div>
+
+		<?php endif; ?>
 
 	</div>
 
