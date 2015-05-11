@@ -41,4 +41,25 @@ Route::post('/r/{subreddit}', 				'HomeController@formToSubreddit');
 Route::post('/r/{subreddit}/{sort}',		'HomeController@formToSubreddit');
 Route::post('/r/{subreddit}/{sort}/{time}', 'HomeController@formToSubreddit');
 
+// api
+Route::group(['prefix' => 'api', 'after' => 'allowOrigin'], function() {
+
+	Route::get('comments/{id}', 'ApiController@getComments');
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

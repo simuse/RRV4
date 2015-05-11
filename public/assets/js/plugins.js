@@ -1,3 +1,11 @@
+/**
+ * Red.It - v0.0.3
+ * http://reddit.simonvreux.be
+ *
+ * Author: Simon Vreux <simon.vreux@gmail.com>
+ * License: MIT (http://opensource.org/licenses/MIT)
+ * Updated: 11-05-2015
+ */
 /*!
  * # Semantic UI 1.11.8 - Site
  * http://github.com/semantic-org/semantic-ui/

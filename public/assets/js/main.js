@@ -1,4 +1,12 @@
 /**
+ * Red.It - v0.0.3
+ * http://reddit.simonvreux.be
+ *
+ * Author: Simon Vreux <simon.vreux@gmail.com>
+ * License: MIT (http://opensource.org/licenses/MIT)
+ * Updated: 11-05-2015
+ */
+/**
  * Save a cookie in the browser
  * @param {string} name
  * @param {string} value

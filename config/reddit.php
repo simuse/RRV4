@@ -13,10 +13,10 @@ return [
 
 	'api' => [
 
+		'redirect_uri'	=> 'http://loc.red.it/auth',
 		'auth_duration'	=> 'permanent',
 		'client_id'		=> 'OMFVgsuPWGI4Bg',
 		'host' 			=> 'http://www.reddit.com',
-		'redirect_uri'	=> 'http://loc.red.it/auth',
 		'secret'		=> 'sQSal1bqi0cJNWI6uR5KtOIEeU4',
 		'user_agent'	=> 'www:red.it:v0.5 (by /u/simuse)',
 
@@ -122,19 +122,17 @@ return [
 	|
 	*/
 
+	'regex' => [
+		'bandcamp' 	 => '/bandcamp.com/',
+		'gfycat' 	 => '/gfycat.com\/(\w+)/',
+		'imgur' 	 => '/imgur.com/',
+		'imguralbum' => '/imgur.com\/(?:gallery|a)\/(\w{4,})/',
+		'soundcloud' => '/soundcloud.com/',
+		'vimeo'		 => '/vimeo.com\/(\d+)($|\/)/',
+		'youtube'	 => '/(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/i',
+	],
+
 	'formats' => [
-
-		'image' => [
-			'jpg',
-			'gif',
-			'png',
-			'jpeg',
-		],
-
-		'urls' => [
-
-		],
-
 		'videoDomains' => [
 			'youtube.com',
 			'm.youtube.com',

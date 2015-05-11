@@ -3,12 +3,12 @@
  *
  * Available tasks:
  * ----------------
- * - clean         delete files and folders
- * - copy          copy files to another folder
- * - imagemin      minify images
+ * - clean         delete files in dist folder
+ * - copy          copy files to dist folder
+ * - imagemin      minify images in src/img to dist/img
  * - less          compile LESS files
  * - csslint       validate CSS files
- * - cssmin        minify CSS
+ * - csso          minify CSS
  * - concat        concatenate JS
  * - jshint        validate JS
  * - uglify        minify JS
@@ -22,17 +22,18 @@
  *
  * Bundled tasks:
  * --------------
- * - css           less:dev, cssmin
- * - js            jshint, concat
+ * - css           less, csso
+ * - js            jshint, concat, uglify
  * - img           imagemin
- * - report        plato, open:reports
+ * - reports       plato, open:reports
  * - doc           yuidoc, open:doc
  * - serve         php:server, browserSync, watch
- * - prod/build    clean, copy, images, less:prod, autoprefixer, cssmin, csslint, jshint, uglify, doc, report, bump, notify:prod
+ * - prod/build    clean, bump, copy, images, css, js, doc, reports
  *
+ * @prod fix copy
  * @TODO improve plato task
  * @TODO improve watch / browsersync synergy
- * @TODO fix serve task
+ * @TODO fix serve task (look at grunt-concurrent)
  * @TODO fix bump task
  */
 
@@ -50,11 +51,12 @@ module.exports = function (grunt) {
 
             banner:
                 '/**\n' +
-                ' * <%= pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
+                ' * <%= pkg.name %> - <%= pkg.description %> - v<%= pkg.version %>\n' +
                 ' * <%= pkg.homepage %>\n' +
                 ' *\n' +
-                ' * Copyright 2014-<%= grunt.template.today("yyyy") %> <%= pkg.author %>\n' +
-                ' * Licensed under <%= pkg.license.type %> (<%= pkg.license.url %>)\n' +
+                ' * Author: <%= pkg.author %>\n' +
+                ' * License: <%= pkg.license.type %> (<%= pkg.license.url %>)\n' +
+                ' * Updated: <%= grunt.template.today("dd-mm-yyyy") %>\n' +
                 ' */\n'
 
         }, // meta
@@ -109,6 +111,7 @@ module.exports = function (grunt) {
 
             dev: {
                 options: {
+                    banner: '<%= meta.banner %>',
                     compress: false,
                     relativeUrls: false,
                     sourceMap: true,
@@ -118,19 +121,6 @@ module.exports = function (grunt) {
                 },
                 files: {
                     '<%= dir.dist %>/css/main.css': ['<%= dir.src %>/less/main.less'],
-                }
-            },
-
-            prod: {
-                options: {
-                    banner: '<%= meta.banner %>',
-                    compress: true,
-                    relativeUrls: false,
-                    strictImports: true,
-                    strictMath: true,
-                },
-                files: {
-                    '<%= dir.dist %>/css/main.min.css': ['<%= dir.src %>/less/main.less'],
                 }
             }
 
@@ -148,25 +138,23 @@ module.exports = function (grunt) {
 
         }, // csslint
 
-        cssmin: {
+        csso: {
 
-            options: {
-                advanced: false,
-                compatibility: 'ie8',
-                debug: true,
-                keepSpecialComments: 0,
+            options: {
+                banner: '<%= meta.banner %>',
             },
 
             target: {
                 files: {
                     '<%= dir.dist %>/css/main.min.css': '<%= dir.dist %>/css/main.css'
                 }
-            },
+            }
 
-        }, // cssmin
+        }, // csso
 
         concat: {
             options: {
+                banner: '<%= meta.banner %>',
                 separator: ';',
                 stripBanners: true,
             },
@@ -197,6 +185,7 @@ module.exports = function (grunt) {
         uglify: {
 
             options: {
+                banner: '<%= meta.banner %>',
                 separator: ';',
                 stripBanners: true,
             },
@@ -272,6 +261,14 @@ module.exports = function (grunt) {
             assets: {
                 tasks: ['js', 'css'],
             },
+
+            docs: {
+                tasks: ['doc', 'reports'],
+            },
+
+            files: {
+                tasks: ['copy', 'img'],
+            }
 
         }, // concurrent
 
@@ -382,6 +379,7 @@ module.exports = function (grunt) {
         }, // bump
 
     };
+
     require('load-grunt-tasks')(grunt);
     require('time-grunt')(grunt);
     grunt.initConfig(grunt.util._.extend(taskConfig, userConfig));
@@ -390,13 +388,13 @@ module.exports = function (grunt) {
     *  Tasks registration
     *  =====================================================*/
 
-    grunt.registerTask('css', [ 'less:dev', 'cssmin', 'notify:css' ]);
+    grunt.registerTask('css', [ 'less', 'csso', 'notify:css' ]);
 
     grunt.registerTask('js', [ 'jshint', 'concat', 'uglify', 'notify:js' ]);
 
     grunt.registerTask('img', [ 'imagemin', 'notify:img' ]);
 
-    grunt.registerTask('report', [ 'plato', 'open:reports' ]);
+    grunt.registerTask('reports', [ 'plato', 'open:reports' ]);
 
     grunt.registerTask('doc', [ 'yuidoc', 'open:doc' ]);
 
@@ -411,15 +409,10 @@ module.exports = function (grunt) {
 
     grunt.registerTask('prod', [
         'clean:dist',
-        'copy',
-        'img',
-        'less:dev',
-        'cssmin',
-        'jshint',
-        'uglify',
-        'doc',
-        'report',
-        // 'bump',
+        'bump',
+        'concurrent:files',
+        'concurrent:assets',
+        'concurrent:docs',
         'notify:prod',
     ]);
 

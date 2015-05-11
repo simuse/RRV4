@@ -8,6 +8,19 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 ### Fixed
 
+## 0.0.3 - 2015-05-10
+
+### Changed
+- Moved Post Type regexes into config.reddit.php
+- Improved Post Type regexes
+- Support for gifv & gfycat & bandcamp Post Types
+
+### Removed
+- grunt-cssmin
+
+### Added
+- grunt-csso
+
 ## 0.0.2 - 2015-04-21
 
 ### Changed

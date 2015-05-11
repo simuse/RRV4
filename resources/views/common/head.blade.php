@@ -5,16 +5,17 @@
 
 {{-- title --}}
 <title>
-	@if (isset($subreddit)){{ $subreddit }} |
-	{{-- @elseif (isset($viewName) && $viewName === 'single') {{ $post['title'] }} | --}}
-	@endif Red.It
+	@if (isset($viewName) && $viewName === 'single') {{ $post['title'] }} | @endif
+	@if (isset($subreddit)){{ $subreddit }} | @endif
+	Red.It
 </title>
 
 {{-- css --}}
-{{-- <link href="{{ url('/assets/css/semantic.min.css') }}" rel="stylesheet">
-<link href="{{ url('/assets/css/fa.css') }}" rel="stylesheet">
-<link href="{{ url('/assets/css/grid.css') }}" rel="stylesheet"> --}}
-<link href="{{ getenv('APP_ENV') === 'local' ? url('/assets/css/main.css') : url('/assets/css/main.min.css') }}" rel="stylesheet">
+@if (getenv('APP_ENV') === 'local')
+	<link href="{{ url('/assets/css/main.css') }}" rel="stylesheet">
+@else
+	<link href="{{ url('/assets/css/main.min.css') }}" rel="stylesheet">
+@endif
 
 {{-- fonts --}}
 <link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>

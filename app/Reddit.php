@@ -1,17 +1,13 @@
-<?php
-
-namespace App;
+<?php namespace App;
 
 use Config;
 use Request;
 use Session;
 use Embed\Embed;
-
 use GuzzleHttp\Client;
 use GuzzleHttp\Event\EmitterInterface;
 use GuzzleHttp\Event\SubscriberInterface;
 use GuzzleHttp\Event\BeforeEvent;
-
 use Illuminate\Database\Eloquent\Model;
 use App\Classes\Helpers;
 
@@ -42,10 +38,8 @@ class Reddit extends Model {
 	 * @param 	string $id
 	 * @return 	array
 	 */
-	public function getPost($id, $sort)
+	public function getPost($id, $sort = 'top')
 	{
-
-		$sort = isset($sort) ? $sort : 'top';
 
 		// making the request
 		try {
@@ -140,7 +134,6 @@ class Reddit extends Model {
 	 *
 	 * @todo move all regexes into config file
 	 * @todo check case: 'http://imgur.com/VSor1R7/.jpg'
-	 * @todo gifv imgur
 	 *
 	 * @param  obj $post
 	 * @return string
@@ -150,71 +143,80 @@ class Reddit extends Model {
 
 		$url = $post['url'];
 		$domain = $post['domain'];
-		$extension = substr(strrchr($post['url'], '.'), 1);
+		$ext = substr(strrchr($post['url'], '.'), 1);
+		$regex = Config::get('reddit.regex');
+
+		// reddit
+		if ($post['is_self']) {
+			return 'reddit';
+		}
 
 		// image
-		if (in_array($extension, Config::get('reddit.formats.image'))) {
-			if ($extension === 'gif') {
-				return 'gif';
-			}
+		if (in_array($ext, array('jpg', 'gif', 'png', 'jpeg'))) {
+			if ($ext === 'gif') return 'gif';
 			return 'image';
 		}
 
 		// imgur
-		if (preg_match('/^.*(imgur.com)\/\w{4,}/', $url)) {
+		if (preg_match($regex['imgur'], $url)) {
+
+			// imgur album
+			if (preg_match($regex['imguralbum'], $url, $matches)) {
+				$post['orininalUrl'] = $url;
+				$post['url'] = '//imgur.com/a/'. $matches[1] .'/embed';
+				return 'album';
+			}
+
+			// imgur gifv
+			if ($ext === 'gifv') return 'iframe';
+
+			// imgur image
 			$post['orininalUrl'] = $url;
 			$post['url'] = $url . '.jpg';
 			return 'image';
 		}
 
-		// imgur album
-		if (preg_match('/imgur.com\/a\/(\w{4,})/', $url, $matches)) {
-			// <iframe class="imgur-album" width="100%" height="550" frameborder="0" src=""></iframe>
-			$post['orininalUrl'] = $url;
-			$post['url'] = '//imgur.com/a/'. $matches[1] .'/embed';
-			return 'album';
-		}
-
 		// gfycat
-		if (preg_match('/gfycat.com\/(\w{4,})/', $url, $matches)) {
-			// <iframe src="http://gfycat.com/ifr/DigitalSpiffyGallowaycow" frameborder="0" scrolling="no" width="294" height="234" style="-webkit-backface-visibility: hidden;-webkit-transform: scale(1);" ></iframe>
+		if (preg_match($regex['gfycat'], $url, $matches)) {
 			$post['orininalUrl'] = $url;
 			$post['url'] = 'http://gfycat.com/ifr/'. $matches[1];
 			return 'iframe';
 		}
 
-		// reddit
-		if (preg_match('/reddit.com\/r\//', $url)) {
-			return 'reddit';
-		}
-
 		// youtube
-		if (preg_match('/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/i', $url, $matches)) {
+		if (preg_match($regex['youtube'], $url, $matches)) {
 			$post['originalUrl'] = $url;
-			$post['url'] = '//youtube.com/embed/' . $matches[2];
+			$post['url'] = '//youtube.com/embed/' . $matches[1];
 			return 'video';
 		}
 
 		// vimeo
-		if (preg_match('/https?:\/\/[www\.]?vimeo.com\/(\d+)($|\/)/', $url, $matches)) {
+		if (preg_match($regex['vimeo'], $url, $matches)) {
 			$post['originalUrl'] = $url;
 			$post['url'] = '//player.vimeo.com/video/' . $matches[1];
 			return 'video';
 		}
 
-		// wikipedia
-		if (preg_match('/wikipedia.org/', $domain)) {
-			return 'wikipedia';
-		}
 
 		// soundcloud
-		if (preg_match('/soundcloud.com/', $domain)) {
+		if (preg_match($regex['soundcloud'], $url)) {
+			$post['originalUrl'] = $url;
+			$post['url'] = 'http://w.soundcloud.com/player/?url=' . $url . '&auto_play=false&color=915f33&theme_color=00FF00';
 			return 'soundcloud';
+		}
+
+		// bandcamp
+		if (preg_match($regex['bandcamp'], $url)) {
+			$oembed = $this->embed->create($url);
+			$post['originalUrl'] = $url;
+			$post['url'] = $oembed->getProvider('opengraph')->bag->get('video');
+			return 'bandcamp';
 		}
 
 		// oembed
 		$oembed = $this->embed->create($url);
 		if ($oembed) {
+			d($oembed);
 			$post['oembed'] = $oembed;
 			return 'oembed';
 		}

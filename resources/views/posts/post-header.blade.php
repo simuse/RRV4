@@ -15,6 +15,8 @@ if ($post['type'] === 'video') {
 	$icon = 'text';
 } else if ($post['type'] === 'oembed') {
 	$icon = 'newspaper-o';
+} else if ($post['type'] === 'soundcloud') {
+	$icon = 'music';
 }
 
 ?>

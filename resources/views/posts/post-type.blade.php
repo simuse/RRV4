@@ -40,16 +40,15 @@
 		</iframe>
 	</div>
 
-{{-- page --}}
-@elseif ($type === 'wikipedia')
-
-	<iframe class="post-album" width="100%" height="400" frameborder="0" src="{{ $post['url'] }}">
-	</iframe>
-
 {{-- soundcloud --}}
 @elseif ($type === 'soundcloud')
 
-	<iframe width="100%" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/196110867&amp;color=ff5500&amp;auto_play=false&amp;show_comments=true&amp;show_reposts=false"></iframe>
+	<iframe width="100%" height="166" scrolling="no" frameborder="no" src="{{ $post['url'] }}"></iframe>
+
+{{-- bandcamp --}}
+@elseif ($type === 'bandcamp')
+
+	<iframe width="100%" height="100" scrolling="no" frameborder="no" src="{{ $post['url'] }}"></iframe>
 
 {{-- oembed --}}
 @elseif ($type === 'oembed')
