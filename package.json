@@ -1,7 +1,7 @@
 {
   "name": "Red.It",
   "description": "A smooth Reddit client app",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "Simon Vreux <simon.vreux@gmail.com>",
   "keywords": [
     "Reddit",
@@ -29,7 +29,7 @@
     "grunt-concurrent": "^1.0.0",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-concat": "~0.3.0",
-    "grunt-contrib-copy": "~0.5.0",
+    "grunt-contrib-copy": "^0.8.0",
     "grunt-contrib-csslint": "^0.4.0",
     "grunt-contrib-imagemin": "^0.9.3",
     "grunt-contrib-jshint": "^0.11.0",

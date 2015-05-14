@@ -26,7 +26,7 @@ module.exports = {
 
         base:           'public',
         hostname:       '127.0.0.1',
-        port:           9000,
+        port:           8010,
         livereload:     false,
         watch:          false,
 
@@ -35,13 +35,13 @@ module.exports = {
     /**
      * Files to watch
      */
-    watch: {
+    // watch: {
 
-        less:   '<%= dir.src %>/less/**/*.less',
-        js:     '<%= dir.src %>/js/**/*.js',
-        php:    ['<%= dir.views %>/**/*.php']
+    //     less:   '<%= dir.src %>/less/**/*.less',
+    //     js:     '<%= dir.src %>/js/**/*.js',
+    //     php:    ['<%= dir.views %>/**/*.php']
 
-    },
+    // },
 
     files: {
 

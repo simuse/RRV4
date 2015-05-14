@@ -18,7 +18,6 @@
  * - plato         generate complexity analysis reports with plato
  * - yuidoc        generate JS documentation
  * - bump          bump project version
- * - wow           increase developer morale
  *
  * Bundled tasks:
  * --------------
@@ -30,10 +29,7 @@
  * - serve         php:server, browserSync, watch
  * - prod/build    clean, bump, copy, images, css, js, doc, reports
  *
- * @prod fix copy
- * @TODO improve plato task
- * @TODO improve watch / browsersync synergy
- * @TODO fix serve task (look at grunt-concurrent)
+ * @TODO optimize with grunt-newer & grunt-extend-config
  * @TODO fix bump task
  */
 
@@ -63,15 +59,13 @@ module.exports = function (grunt) {
 
         clean: {
 
-            dist: {
-                src: [
-                    '<%= dir.dist %>/css/*{.css}',
-                    '<%= dir.dist %>/js/*{.js}'
-                ],
-                options: {
-                    force: true
-                },
-            },
+            assets: [
+                '<%= dir.dist %>/css/*.css',
+                '<%= dir.dist %>/js/*.js',
+                '<%= dir.dist %>/js/*.map',
+                '<%= dir.dist %>/fonts/*',
+                '!<%= dir.dist %>/js/*.min.js',
+            ],
 
         }, // clean
 
@@ -79,13 +73,6 @@ module.exports = function (grunt) {
 
             main: {
                 files: '<%= files.copy %>',
-
-                // @todo make options work
-                // options: {
-                //     expand: true,
-                //     flatten: true
-                // }
-
             }
 
         }, // copy
@@ -204,13 +191,11 @@ module.exports = function (grunt) {
 
         php: {
 
-            server: {
+            dev: {
                 options: {
                     base: '<%= server.base %>',
                     hostname: '<%= server.hostname %>',
                     port: '<%= server.port %>',
-                    keepalive: true,
-                    // open: false,
                 }
             }
 
@@ -218,8 +203,8 @@ module.exports = function (grunt) {
 
         browserSync: {
 
-            dist: {
-                files: {
+            dev: {
+                bsFiles: {
                     src: [
                         '<%= dir.dist %>/css/**/*.css',
                         '<%= dir.dist %>/js/**/*.js',
@@ -228,11 +213,9 @@ module.exports = function (grunt) {
                 },
                 options: {
                     proxy: '<%= server.hostname %>:<%= server.port %>',
-                    watchTask: true,
-                    notify: true,
+                    port: 8080,
                     open: true,
-                    logLevel: 'silent',
-                    ghostMode: false,
+                    watchTask: true,
                 }
             }
 
@@ -240,18 +223,19 @@ module.exports = function (grunt) {
 
         watch: {
 
-            options: {
-                livereload: false,
-                livereloadOnError: false
+            views: {
+                files: '<%= dir.views %>',
+                tasks: ['shell:clear', 'notify:watch'],
             },
 
             less: {
                 files: '<%= dir.src %>/less/**/*.less',
-                tasks: [
-                    'shell:clear',
-                    'notify:watch',
-                    'css',
-                ]
+                tasks: ['shell:clear', 'notify:watch', 'less:dev', 'notify:css'],
+            },
+
+            js: {
+                files: '<%= dir.src %>/js/**/*.js',
+                tasks: ['shell:clear', 'notify:watch', 'concat', 'notify:js'],
             },
 
         }, // watch
@@ -274,45 +258,52 @@ module.exports = function (grunt) {
 
         notify: {
 
+            watch: {
+                options: {
+                    title: 'ᕕ( ᐛ )ᕗ',
+                    message: 'File changed',
+                }
+            },
+
             js: {
                 options: {
-                    title: 'JS task complete',
-                    message: '...',
+                    title: '( ღ’ᴗ’ღ )',
+                    message: 'JS files compiled',
                 }
             },
 
             css: {
                 options: {
-                    title: 'CSS task complete',
-                    message: '...',
+                    title: 'ლ(╹◡╹ლ)',
+                    message: 'CSS files compiled ',
                 }
             },
 
             img: {
                 options: {
-                    title: 'IMG task complete',
-                    message: '...',
+                    title: '(︶.̮︶✽)',
+                    message: 'Images optimized',
+                }
+            },
+
+            serve: {
+                options: {
+                    title: '☜(⌒▽⌒)☞',
+                    message: 'Server ready',
                 }
             },
 
             dev: {
                 options: {
-                    title: 'DEV task complete',
-                    message: 'We are ready for development, master',
+                    title: '☆(◒‿◒)☆',
+                    message: 'Dev task complete !',
                 }
             },
 
             prod: {
                 options: {
-                    title: 'PROD task complete',
-                    message: 'All files ready for production',
-                }
-            },
-
-            watch: {
-                options: {
-                    title: 'File change detected',
-                    message: 'Reloading',
+                    title: 'Prod task complete',
+                    message: 'Ready for deployment',
                 }
             },
 
@@ -333,25 +324,13 @@ module.exports = function (grunt) {
             },
 
             files: {
-                src: [ '<%= dir.dist %>/js/**/*.js' ],
-                dest: '<%= dir.src %>/reports',
+                src: [
+                    '<%= dir.src %>/js/**/*.js',
+                ],
+                dest: '<%= dir.reports %>',
             },
 
         }, // plato
-
-        open: {
-
-            reports: {
-                path: '<%= dir.src %>/reports/index.html',
-                app: 'Google Chrome',
-            },
-
-            doc: {
-                path: '<%= dir.src %>/docs/index.html',
-                app: 'Google Chrome',
-            }
-
-        }, //open
 
         yuidoc: {
 
@@ -362,18 +341,35 @@ module.exports = function (grunt) {
                 url: '<%= pkg.homepage %>',
 
                 options: {
-                    paths: '<%= dir.src %>/js',
-                    outdir: '<%= dir.src %>/docs/',
+                    paths: '<%= dir.src %>/js/',
+                    outdir: '<%= dir.docs %>/',
                 },
             },
 
         }, // yuidoc
 
+        open: {
+
+            reports: {
+                path: '<%= dir.reports %>/index.html',
+                app: 'Google Chrome',
+            },
+
+            docs: {
+                path: '<%= dir.docs %>/index.html',
+                app: 'Google Chrome',
+            }
+
+        }, //open
+
         bump: {
 
             options: {
                 files: ['package.json'],
-                commit: false,
+                commit: true,
+                commitMessage: 'v%VERSION%',
+                commitFiles: ['-a'],
+
             }
 
         }, // bump
@@ -396,13 +392,12 @@ module.exports = function (grunt) {
 
     grunt.registerTask('reports', [ 'plato', 'open:reports' ]);
 
-    grunt.registerTask('doc', [ 'yuidoc', 'open:doc' ]);
+    grunt.registerTask('docs', [ 'yuidoc', 'open:docs' ]);
 
-    grunt.registerTask('serve', [ 'php:server', 'browserSync', /*'watch'*/ ]);
+    grunt.registerTask('serve', [ 'php', 'browserSync', 'watch', 'notify:serve' ]);
 
     grunt.registerTask('default', [
-        'copy',
-        'img',
+        'concurrent:files',
         'concurrent:assets',
         'notify:dev',
     ]);

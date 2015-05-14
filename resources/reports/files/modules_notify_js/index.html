@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - modules/notify.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>modules/notify.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">58.77</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">86</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">16.42</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">0.68</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">/* Custom notification plugin
+ * call with $.notify(&#039;Message to be displayed&#039;, optionObject);
+---------------------------------------------- */
+(function ($) {
+    $.extend({
+        notify: function (content, options) {
+            // defaults
+            var settings = $.extend({
+                animationIn: &#039;fadeInDown&#039;, // [string or false] animation from animate.less
+                animationOut: &#039;fadeOutUp&#039;, // [string or false] animation from animate.less
+                autoHide: 5000,            // [integer or false] time in ms before hiding notif
+                dismissable: true,         // [boolean] hide notif on click
+                icon: null,                // [string] the name of an icon from FontAwesome (http://fortawesome.github.io/Font-Awesome/icons/)
+                iconPosition: &#039;left&#039;,      // [string] position of the icon relative to the text
+                position: &#039;top right&#039;,     // [string] position x and y of the notif
+                type: &#039;info&#039;,              // [string] type of notif (info, warning, error, success)
+
+                onShow: null,              // [function] callback
+                onHide: null,              // [function] callback
+            }, options ),
+            s = settings;
+
+            // check type
+            var _validTypes = [&#039;info&#039;, &#039;warning&#039;, &#039;error&#039;, &#039;danger&#039;, &#039;success&#039;];
+            if (_validTypes.indexOf(s.type) &lt; 0) {
+                s.type = &#039;info&#039;;
+            }
+
+            // add container
+            var $container = $(&#039;#notify-container&#039;);
+            if ($container.length === 0) {
+                $container = $(&#039;&lt;div&gt;&lt;/div&gt;&#039;).addClass(s.position).prop(&#039;id&#039;, &#039;notify-container&#039;).prependTo(&#039;body&#039;);
+            }
+
+            // build content
+            var $content = $(&#039;&lt;p&gt;&lt;/p&gt;&#039;).html(content);
+            if (s.icon) {
+                var _contentClasses = [&#039;fa&#039;, &#039;fa-&#039;+s.icon, &#039;fa-&#039;+s.iconPosition];
+                $content.addClass(_contentClasses.join(&#039; &#039;));
+            }
+
+            // build notif
+            var _itemClasses = [&#039;notify&#039;, s.type];
+            if (s.animationIn) {
+                _itemClasses.push(&#039;animated&#039;, s.animationIn);
+            }
+            if (s.dismissable) {
+                _itemClasses.push(&#039;dismissable&#039;);
+
+            }
+            var $notif = $(&#039;&lt;div&gt;&lt;/div&gt;&#039;).addClass(_itemClasses.join(&#039; &#039;)).attr(&#039;role&#039;, &#039;alert&#039;).append($content);
+            if (s.dismissable) {
+                $notif.prepend(&#039;&lt;button type=&quot;button&quot; class=&quot;close&quot; aria-label=&quot;Close&quot;&gt;&lt;span aria-hidden=&quot;true&quot;&gt;&amp;times;&lt;/span&gt;&lt;/button&gt;&#039;);
+            }
+
+            // show notif
+            $notif.appendTo($container);
+            if (typeof s.onShow === &#039;function&#039;) {
+                s.onShow();
+            }
+
+            // autohide
+            if (s.autoHide) {
+                window.setTimeout(_hide, s.autoHide);
+            }
+
+            // close notif
+            function _hide() {
+                if (s.animationOut) {
+                    $notif.one(&#039;webkitAnimationEnd oanimationend msAnimationEnd animationend&#039;, function(e) {
+                        $notif.remove();
+                    });
+                    $notif.removeClass(s.animationIn).addClass(s.animationOut);
+                } else {
+                    $(this).remove();
+                }
+                if (typeof s.onHide === &#039;function&#039;) {
+                    s.onHide();
+                }
+            }
+
+            if (s.dismissable) {
+                $notif.find(&#039;.close&#039;).on(&#039;click touch&#039;, _hide);
+            }
+
+            return this;
+        }
+    });
+})(jQuery);</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

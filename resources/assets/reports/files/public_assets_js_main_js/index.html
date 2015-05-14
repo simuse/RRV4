@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - public/assets/js/main.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>public/assets/js/main.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">69.01</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">578</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">41.05</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">3.85</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">/**
+ * Red.It - A smooth Reddit client app - v0.0.3
+ * http://reddit.simonvreux.be
+ *
+ * Author: Simon Vreux &lt;simon.vreux@gmail.com&gt;
+ * License: MIT (http://opensource.org/licenses/MIT)
+ * Updated: 13-05-2015
+ */
+/**
+ * Save a cookie in the browser
+ * @param {string} name
+ * @param {string} value
+ * @param {integer} days
+ */
+function createCookie(name,value,days) {
+    var expires;
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime()+(days*24*60*60*1000));
+        expires = &#039;; expires=&#039;+date.toGMTString();
+    } else {
+    	expires = &#039;&#039;;
+    }
+    document.cookie = name+&#039;=&#039;+value+expires+&#039;; path=/&#039;;
+}
+
+/**
+ * Returns the value of a cookie
+ * @param {string} name
+ * @return {string | boolean}
+ */
+function readCookie(name) {
+    var n = name + &#039;=&#039;;
+    var ca = document.cookie.split(&#039;;&#039;);
+    for(var i=0;i &lt; ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)===&#039; &#039;) {
+        	c = c.substring(1,c.length);
+        }
+        if (c.indexOf(n) === 0) {
+        	return c.substring(n.length,c.length);
+        }
+    }
+    return false;
+}
+
+/**
+ * Deletes a cookie
+ * @param {string} name
+ */
+function eraseCookie(name) {
+    createCookie(name,&#039;&#039;,-1);
+}
+;(function ($) {
+
+    var Extend = {
+
+        /**
+         * Give the selector and it&#039;s argument the same height
+         * @author  Simon Vreux &lt;simon@cherrypulp.com&gt;
+         */
+        sameHeight: function (el) {
+            return this.each(function () {
+            	var h1 = $(this).height(),
+            		h2 = el.height();
+
+            	if (h1 &lt; h2) {
+            		$(this).height(h2);
+            	} else {
+            		el.height(h1);
+            	}
+            });
+        },
+
+		/**
+    	 * Make the selector scroll back to top on click
+		 * @author  Simon Vreux &lt;simon@cherrypulp.com&gt;
+		 * @param  {int} offset from when the button should be visible
+		 */
+		scrollToTop: function(offset, duration) {
+			return this.each(function() {
+				var $this = $(this),
+					$win = $(window),
+					offset = offset || 300,
+					duration = duration || 300;
+
+				$win.scroll(function() {
+			        if ($win.scrollTop() &gt;= offset) {
+			            $this.addClass(&#039;visible&#039;);
+			        } else {
+			            $this.removeClass(&#039;visible&#039;);
+			        }
+			    });
+
+				$this.on(&#039;click&#039;, function(e) {
+					e.preventDefault();
+			        $(&#039;html, body&#039;).stop().animate({
+			            scrollTop: 0
+			        }, duration);
+			    });
+
+			});
+		},
+
+		/**
+		 * Toggle the FontAwesome class for an icon
+		 *
+    	 * @version  1.0.0
+		 * @author   Simon Vreux &lt;simon@cherrypulp.com&gt;
+		 * @example  $(&#039;i&#039;).toggleIcon(&#039;fa-edit&#039;);
+		 * @param    {string} newIcon new icon class
+		 */
+		toggleIcon: function(newIcon) {
+			return this.each(function() {
+				var $this = $(this),
+					oldIcon = $this.attr(&#039;class&#039;).substring(3);
+
+				if (typeof newIcon === &#039;undefined&#039;) {
+					newIcon = $this.data(&#039;toggle&#039;);
+				}
+
+				$this.removeClass(oldIcon).addClass(newIcon).data(&#039;toggle&#039;, oldIcon);
+
+			});
+		}
+
+    };
+
+    $.extend($.fn, Extend);
+
+}) (window.jQuery);
+;;(function ( $, window, document, undefined ) {
+
+    &quot;use strict&quot;;
+
+        // defaults
+        var pluginName = &quot;loading&quot;,
+                defaults = {
+                propertyName: &quot;value&quot;
+        };
+
+        // plugin constructor
+        function Loading ( element, options ) {
+            this.element = element;
+            this.settings = $.extend( {}, defaults, options );
+            this._defaults = defaults;
+            this._name = pluginName;
+            this.init();
+        }
+
+        // Avoid Plugin.prototype conflicts
+        $.extend(Loading.prototype, {
+
+            init: function () {
+                console.log(this.destroy);
+                // Place initialization logic here
+                // You already have access to the DOM element and
+                // the options via the instance, e.g. this.element
+                // and this.settings
+                // you can add more functions like the one below and
+                // call them like so: this.yourOtherFunction(this.element, this.settings).
+                console.log(&quot;xD&quot;);
+            },
+
+            destroy: function () {
+                console.log(&#039;desctroy&#039;);
+            }
+
+        });
+
+        // A really lightweight plugin wrapper around the constructor,
+        // preventing against multiple instantiations
+        $.fn[ pluginName ] = function ( options ) {
+            return this.each(function() {
+                if ( !$.data( this, &quot;plugin_&quot; + pluginName ) ) {
+                    $.data( this, &quot;plugin_&quot; + pluginName, new Loading( this, options ) );
+                }
+            });
+        };
+
+})( jQuery, window, document );
+
+
+
+
+
+;(function ($) {
+    $.extend({
+        notify: function (content, options) {
+            // defaults
+            var settings = $.extend({
+                animationIn: &#039;fadeInDown&#039;, // [string or false] animation from animate.less
+                animationOut: &#039;fadeOutUp&#039;, // [string or false] animation from animate.less
+                autoHide: 5000,            // [integer or false] time in ms before hiding notif
+                dismissable: true,         // [boolean] hide notif on click
+                icon: null,                // [string] the name of an icon from FontAwesome (http://fortawesome.github.io/Font-Awesome/icons/)
+                iconPosition: &#039;left&#039;,      // [string] position of the icon relative to the text
+                position: &#039;top right&#039;,     // [string] position x and y of the notif
+                type: &#039;info&#039;,              // [string] type of notif (info, warning, error, success)
+
+                onShow: null,              // [function] callback
+                onHide: null,              // [function] callback
+            }, options ),
+            s = settings;
+
+            // check type
+            var _validTypes = [&#039;info&#039;, &#039;warning&#039;, &#039;error&#039;, &#039;danger&#039;, &#039;success&#039;];
+            if (_validTypes.indexOf(s.type) &lt; 0) {
+                s.type = &#039;info&#039;;
+            }
+
+            // add container
+            var $container = $(&#039;#notify-container&#039;);
+            if ($container.length === 0) {
+                $container = $(&#039;&lt;div&gt;&lt;/div&gt;&#039;).addClass(s.position).prop(&#039;id&#039;, &#039;notify-container&#039;).prependTo(&#039;body&#039;);
+            }
+
+            // build content
+            var $content = $(&#039;&lt;p&gt;&lt;/p&gt;&#039;).html(content);
+            if (s.icon) {
+                var _contentClasses = [&#039;fa&#039;, &#039;fa-&#039;+s.icon, &#039;fa-&#039;+s.iconPosition];
+                $content.addClass(_contentClasses.join(&#039; &#039;));
+            }
+
+            // build notif
+            var _itemClasses = [&#039;notify&#039;, s.type];
+            if (s.animationIn) {
+                _itemClasses.push(&#039;animated&#039;, s.animationIn);
+            }
+            if (s.dismissable) {
+                _itemClasses.push(&#039;dismissable&#039;);
+
+            }
+            var $notif = $(&#039;&lt;div&gt;&lt;/div&gt;&#039;).addClass(_itemClasses.join(&#039; &#039;)).attr(&#039;role&#039;, &#039;alert&#039;).append($content);
+            if (s.dismissable) {
+                $notif.prepend(&#039;&lt;button type=&quot;button&quot; class=&quot;close&quot; aria-label=&quot;Close&quot;&gt;&lt;span aria-hidden=&quot;true&quot;&gt;&amp;times;&lt;/span&gt;&lt;/button&gt;&#039;);
+            }
+
+            // show notif
+            $notif.appendTo($container);
+            if (typeof s.onShow === &#039;function&#039;) {
+                s.onShow();
+            }
+
+            // autohide
+            if (s.autoHide) {
+                window.setTimeout(_hide, s.autoHide);
+            }
+
+            // close notif
+            function _hide() {
+                if (s.animationOut) {
+                    $notif.one(&#039;webkitAnimationEnd oanimationend msAnimationEnd animationend&#039;, function(e) {
+                        $notif.remove();
+                    });
+                    $notif.removeClass(s.animationIn).addClass(s.animationOut);
+                } else {
+                    $(this).remove();
+                }
+                if (typeof s.onHide === &#039;function&#039;) {
+                    s.onHide();
+                }
+            }
+
+            if (s.dismissable) {
+                $notif.find(&#039;.close&#039;).on(&#039;click touch&#039;, _hide);
+            }
+
+            return this;
+        }
+    });
+})(jQuery);
+;jQuery(document).ready(function($) {
+
+	var $win = $(window),
+		$body = $(&#039;body&#039;),
+		winH = $win.height();
+
+	$win.on(&#039;resize&#039;, function() {
+		winH = $win.height();
+	});
+
+/* ======================================================
+*  Common
+*  =====================================================*/
+
+	/* Common - Init dropdowns
+	---------------------------------------------- */
+	$(&#039;.dropdown&#039;).dropdown({
+	    transition: &#039;scale&#039;
+	});
+
+	/* Common - Init popups
+	---------------------------------------------- */
+	$(&#039;.toggle-popup&#039;).popup({
+    	on: &#039;click&#039;
+  	});
+
+/* ======================================================
+*  Header
+*  =====================================================*/
+
+	/* Header - Toggle Sidebar
+	---------------------------------------------- */
+	$(&#039;#sidebar-toggle&#039;).on(&#039;click&#039;, function(e) {
+		e.preventDefault();
+		$(&#039;#sidebar&#039;).sidebar(&#039;setting&#039;, &#039;transition&#039;, &#039;overlay&#039;).sidebar(&#039;toggle&#039;);
+	});
+
+	/* Header - Open Login modal
+	---------------------------------------------- */
+  	$(&#039;#toggle-modal-login&#039;).on(&#039;click&#039;, function() {
+  		$(&#039;#modal-login&#039;).modal().modal(&#039;show&#039;);
+  	});
+
+	/* Header - Autocomplete
+	---------------------------------------------- */
+	// Autocompeter(document.getElementById(&#039;input-subreddit&#039;), {
+	// 	number: 20
+	// });
+
+/* ======================================================
+*  Sidebar
+*  =====================================================*/
+
+  	/* Sidebar - Open About modal
+	---------------------------------------------- */
+  	$(&#039;#toggle-modal-about&#039;).on(&#039;click&#039;, function() {
+  		$(&#039;#modal-about&#039;).modal().modal(&#039;show&#039;);
+  	});
+
+/* ======================================================
+*  Posts
+*  =====================================================*/
+
+	/* Posts - Lazy Loading
+	---------------------------------------------- */
+	$(&#039;.post-image img, iframe, .post-oembed-image img&#039;).unveil(200, function() {
+		$(this).load(function() {
+			this.style.opacity = 1;
+
+			if (window.settings.layout === &#039;grid&#039;) {
+				$(&#039;#posts&#039;).isotope(&#039;layout&#039;);
+			}
+		});
+	});
+
+	/* Posts - Fancybox
+	---------------------------------------------- */
+	$(&#039;.post-image&#039;).fancybox({
+		autoResize: true,
+		closeBtn: false,
+		margin: 15,
+		mouseWheel: true,
+		helpers: {
+			overlay: {
+				locked: false
+			}
+		}
+	});
+
+	/* Posts - Toggle Layout
+	---------------------------------------------- */
+	var setLayout = function(layout) {
+
+		if (layout === &#039;grid&#039;) {
+
+			var $posts = $(&#039;.post&#039;);
+
+			// isotope
+			$posts.addClass(&#039;isotope&#039;);
+			$(&#039;#posts&#039;).isotope({
+				itemSelector: &#039;.post&#039;,
+				layoutMode: &#039;masonry&#039;,
+			});
+
+			initPostPopover();
+
+		} else if (layout === &#039;list&#039;) {
+
+			$(&#039;.post&#039;).removeClass(&#039;isotope&#039;);
+			$(&#039;#posts&#039;).isotope(&#039;destroy&#039;);
+
+			destroyPostPopover();
+
+		}
+
+		window.settings.layout = layout;
+
+		createCookie(&#039;layout&#039;, window.settings.layout, 30);
+
+	};
+
+	$(&#039;.set-layout&#039;).on(&#039;click&#039;, function(e) {
+		e.preventDefault();
+		$(&#039;.set-layout&#039;).removeClass(&#039;active&#039;);
+		$(this).addClass(&#039;active&#039;);
+		setLayout($(this).data(&#039;layout&#039;));
+	});
+
+	if ((window.settings.layout === &#039;grid&#039;) &amp;&amp; (window.settings.view === &#039;index&#039;)) {
+		setLayout(&#039;grid&#039;);
+	}
+
+	/* Posts - toggle post-header popover on Isotope layout
+	---------------------------------------------- */
+	function initPostPopover() {
+		$(&#039;.post-heading&#039;).popup({
+			className: {
+				popup: &#039;ui fluid popup&#039;,
+			},
+			delay: {
+				show: 20,
+				hide: 2000,
+			},
+			duration: 300,
+			exclusive: false,
+			hideOnScroll: false,
+			hoverable: true,
+			inline   : true,
+			position : &#039;bottom left&#039;,
+			transition: &#039;fade&#039;,
+		});
+	}
+
+	function destroyPostPopover() {
+		$(&#039;.post-heading&#039;).popup(&#039;destroy&#039;);
+	}
+
+/* ======================================================
+*  Comments
+*  =====================================================*/
+
+	/* Comments - Toggle Replies
+	---------------------------------------------- */
+	$(&#039;.toggle-replies&#039;).on(&#039;click&#039;, function(e) {
+		e.preventDefault();
+		$(this).find(&#039;.fa&#039;).toggleClass(&#039;fa-plus&#039;).toggleClass(&#039;fa-minus&#039;);
+		$(this).parent().siblings(&#039;.comments&#039;).toggle();
+	});
+
+	/* Comments - load more comments
+	---------------------------------------------- */
+	$(&#039;.load-more-comments&#039;).on(&#039;click&#039;, function(e) {
+		e.preventDefault();
+		console.log(this);
+	});
+
+/* ======================================================
+*  Sharing
+*  =====================================================*/
+
+	/* Share - Twitter
+	---------------------------------------------- */
+	$(&#039;.share-twitter&#039;).on(&#039;click&#039;, function(e) {
+		e.preventDefault();
+
+		var url = window.settings.root + &#039;/p/&#039; + $(this).data(&#039;id&#039;),
+			text = $(this).closest(&#039;.post&#039;).find(&#039;.post-title&#039;).text();
+
+		text += &#039; &lt;on Red.It&gt;&#039;;
+
+		window.open(&#039;http://twitter.com/share?url=&#039; + url + &#039;&amp;text=&#039; + text + &#039;&amp;&#039;, &#039;twitterwindow&#039;, &#039;height=450, width=550, top=&#039;+($(window).height()/2 - 225) +&#039;, left=&#039;+($(window).width()/2 - 225)+&#039;, toolbar=0, location=0, menubar=0, directories=0, scrollbars=0&#039;);
+	});
+
+	/* Share - Google
+	---------------------------------------------- */
+	$(&#039;.share-google&#039;).on(&#039;click&#039;, function(e) {
+		e.preventDefault();
+
+		var url = window.settings.root + &#039;/p/&#039; + $(this).data(&#039;id&#039;),
+			text = $(this).closest(&#039;.post&#039;).find(&#039;.post-title&#039;).text();
+
+		text += &#039; &lt;on Red.It&gt;&#039;;
+
+		window.open(&#039;https://plus.google.com/share?url=&#039; + url + &#039;&amp;text=&#039; + text, &#039;&#039;, &#039;menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=450,width=550,top=&#039;+($(window).height()/2 - 225) +&#039;, left=&#039;+($(window).width()/2 - 225));
+	});
+
+	/* Posts - Share - Facebook
+	---------------------------------------------- */
+	// $(document).on(&#039;FBloaded&#039;, function() {
+
+	// 	$(&#039;.fb-share&#039;).on(&#039;click&#039;, function(e) {
+	// 		e.preventDefault();
+
+	// 		FB.ui({
+	// 			caption: &#039;Freeligion&#039;,
+	// 			description: &#039;Smile for Freedom and Peace&#039;,
+	// 		    link: $(this).data(&#039;url&#039;),
+	// 		    method: &#039;feed&#039;,
+	// 		    name: &#039;Share a smile for peace&#039;,
+	// 		    picture: $(this).data(&#039;picture&#039;),
+	// 		    redirect: false
+	// 		}, function(response) {
+	// 		    if (response &amp;&amp; !response.error_code) {
+	// 		    	console.log(&#039;FB share: Posting completed.&#039;);
+	// 		    } else {
+	// 		    	console.log(&#039;FB share: Error while posting.&#039;);
+	// 		    }
+	// 		});
+	// 	});
+
+	// });
+
+	/* Common - Form validation
+	---------------------------------------------- */
+	// $(&#039;#formLogin&#039;).form({
+	// 	username: {
+	// 		identifier: &#039;username&#039;,
+	// 		rules: [
+	// 			{
+	// 				type: &#039;empty&#039;,
+	// 				prompt: &#039;Please enter your username&#039;
+	// 			}
+	// 		]
+	// 	},
+	// 	password: {
+	// 		identifier: &#039;password&#039;,
+	// 		rules: [
+	// 			{
+	// 				type: &#039;empty&#039;,
+	// 				prompt: &#039;Please enter your password&#039;
+	// 			}
+	// 		]
+	// 	}
+	// });
+
+	/* FreezeFrame: pause gifs
+	---------------------------------------------- */
+	// var freezeframe_options = {
+	// 	animation_icon_position: &#039;center center&#039;,
+	// 	class_name: &#039;post-gif&#039;,
+	// 	loading_background_color: &#039;red&#039;,
+	// 	loading_fade_in_speed: 300,
+	// 	trigger_event: &#039;click&#039;,
+	// };
+	// freezeframe.run();
+
+	/* Loader
+	---------------------------------------------- */
+	// var loaderValue = 0;
+
+	// var loaderInt = setInterval(function() {
+	// 	loaderValue = loaderValue + 10;
+	// 	setLoader(loaderValue);
+	// 	if (loaderValue &gt;= 100) {
+	// 		clearInterval(loaderInt);
+	// 	}
+	// },2000);
+
+	// function setLoader(value) {
+	// 	var $loader = $(&#039;#page-loader&#039;),
+	// 		$bar = $loader.find(&#039;.bar&#039;);
+
+	// 	$bar.css(&#039;width&#039;, value+&#039;%&#039;);
+	// }
+
+	// function hideLoader() {
+	// 	$(&#039;#page-loader&#039;).fadeOut();
+	// }
+
+	// setLoader(10);
+
+	/* Comments: toggle all comment
+	 * @todo disturbs icons and order of already closed comments
+	---------------------------------------------- */
+	// $(&#039;.toggle-comments&#039;).on(&#039;click&#039;, function(e) {
+	// 	e.preventDefault();
+
+	// 	$(this).find(&#039;i&#039;).toggleIcon();
+
+	// 	$(&#039;.toggle-replies&#039;).find(&#039;i&#039;).toggleIcon();
+	// 	$(&#039;.comment-replies&#039;).toggleClass(&#039;comment-replies-hidden&#039;);
+	// });
+
+	/* Selftext : show full post
+	---------------------------------------------- */
+	// $(&#039;.selftext&#039;).each(function() {
+	// 	var $this = $(this),
+	// 		$button = $this.find(&#039;.show-full&#039;),
+	// 		height = $this.outerHeight();
+
+	// 	if (height &gt; 250) {
+	// 		$this.height(250);
+	// 		$button.show().on(&#039;click&#039;, function() {
+	// 			$(this).fadeOut().closest(&#039;.selftext&#039;).css(&#039;height&#039;, height);
+	// 		});
+	// 	}
+	// });
+
+
+});</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

@@ -216,7 +216,7 @@ class Reddit extends Model {
 		// oembed
 		$oembed = $this->embed->create($url);
 		if ($oembed) {
-			d($oembed);
+			// d($oembed);
 			$post['oembed'] = $oembed;
 			return 'oembed';
 		}
